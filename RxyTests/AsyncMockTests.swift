@@ -10,7 +10,11 @@ private protocol DoSomething {
     func doSingleThing() -> Single<Int>
 }
 
-private class MockSomething: BaseMock {
+private class MockSomething: AsyncMock {
+    
+    func doUnexpectedMethod() {
+        unexpectedFunctionCall()
+    }
     
     var doSingleThingResult: SingleResult<Int>?
     func doSingleThing() -> Single<Int> {
@@ -19,10 +23,29 @@ private class MockSomething: BaseMock {
 }
 
 class AsyncMockTests: XCTestCase {
-
-    func testUnexpectedSingle() {
-        let mock = MockSomething()
-        mock.doSingleThing().waitForSuccess()
+    
+    private var mock: MockSomething!
+    
+    override func setUp() {
+        mock = MockSomething()
+    }
+    
+    func testUnexpectedMethodCalled() {
+        expectNimble(error: "Unexpected function call AsyncMockTests.doUnexpectedMethod()") {
+            mock.doUnexpectedMethod()
+        }
+    }
+    
+    func testMockFunctionReturnsResult() {
+        mock.doSingleThingResult = .value(5)
+        let result = mock.doSingleThing().waitForSuccess()
+        expect(result) == 5
+    }
+    
+    func testMockFunctionTriggersUnexpectedMethodCall() {
+        expectNimble(error: "Expected a single value, got error RxyError.unexpectedMethodCall(\"AsyncMockTests.doSingleThing()\") instead") {
+            mock.doSingleThing().waitForSuccess()
+        }
     }
     
 }

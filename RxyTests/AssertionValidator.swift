@@ -54,7 +54,7 @@ class AssertionValidator: AssertionHandler {
     
     init(expectedErrors errors: [String]) {
         // Add expected errors to dictionary with no location.
-        errors.forEach { self.errors[$0] = nil }
+        errors.forEach { self.errors[$0] = nil as ErrorLocation? } // as? ErrorLocation ensures we add a nil to the dictionary rather than removing the value.
     }
     
     func assert(_ assertion: Bool, message: FailureMessage, location: SourceLocation) {

@@ -3,7 +3,7 @@
 
 public enum RxyError: Error {
     case wrongType
-    case unexpectedMethodCall
+    case unexpectedMethodCall(String)
 }
 
 //extension RxyError: Equatable {
