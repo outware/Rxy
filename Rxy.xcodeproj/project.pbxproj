@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		6C1908F7213D0E15003121A2 /* TestSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C1908F6213D0E15003121A2 /* TestSupport.swift */; };
+		6C1908F9213E2A08003121A2 /* Rx+Threading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C1908F8213E2A08003121A2 /* Rx+Threading.swift */; };
+		6C1908FB213E3A77003121A2 /* BaseMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C1908FA213E3A77003121A2 /* BaseMock.swift */; };
+		6C1908FD213E3C94003121A2 /* BaseMockTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C1908FC213E3C94003121A2 /* BaseMockTests.swift */; };
 		6C83A5552137A9B000CE2222 /* Rxy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C83A54B2137A9B000CE2222 /* Rxy.framework */; };
 		6C83A55A2137A9B000CE2222 /* AsyncMockTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C83A5592137A9B000CE2222 /* AsyncMockTests.swift */; };
 		6C83A55C2137A9B000CE2222 /* Rxy.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C83A54E2137A9B000CE2222 /* Rxy.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -55,6 +58,9 @@
 
 /* Begin PBXFileReference section */
 		6C1908F6213D0E15003121A2 /* TestSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSupport.swift; sourceTree = "<group>"; };
+		6C1908F8213E2A08003121A2 /* Rx+Threading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Rx+Threading.swift"; sourceTree = "<group>"; };
+		6C1908FA213E3A77003121A2 /* BaseMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseMock.swift; sourceTree = "<group>"; };
+		6C1908FC213E3C94003121A2 /* BaseMockTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseMockTests.swift; sourceTree = "<group>"; };
 		6C83A54B2137A9B000CE2222 /* Rxy.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Rxy.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C83A54E2137A9B000CE2222 /* Rxy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Rxy.h; sourceTree = "<group>"; };
 		6C83A54F2137A9B000CE2222 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -123,11 +129,13 @@
 		6C83A54D2137A9B000CE2222 /* Rxy */ = {
 			isa = PBXGroup;
 			children = (
-				6C83A54E2137A9B000CE2222 /* Rxy.h */,
-				6C83A54F2137A9B000CE2222 /* Info.plist */,
 				6C83A56F2137B22200CE2222 /* AsyncMock.swift */,
+				6C1908FA213E3A77003121A2 /* BaseMock.swift */,
+				6C83A54F2137A9B000CE2222 /* Info.plist */,
 				6C83A5772137BA6D00CE2222 /* MockResult.swift */,
 				6C83A57B2137C94E00CE2222 /* Rx+Nimble.swift */,
+				6C1908F8213E2A08003121A2 /* Rx+Threading.swift */,
+				6C83A54E2137A9B000CE2222 /* Rxy.h */,
 				6C83A57D2137CC1300CE2222 /* RxyError.swift */,
 			);
 			path = Rxy;
@@ -142,6 +150,7 @@
 				6CA2CB87213CBBA9003B73AB /* Rx+NimbleTests.swift */,
 				6CA2CB89213CBD85003B73AB /* AssertionValidator.swift */,
 				6C1908F6213D0E15003121A2 /* TestSupport.swift */,
+				6C1908FC213E3C94003121A2 /* BaseMockTests.swift */,
 			);
 			path = RxyTests;
 			sourceTree = "<group>";
@@ -268,7 +277,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6C1908F9213E2A08003121A2 /* Rx+Threading.swift in Sources */,
 				6C83A5782137BA6D00CE2222 /* MockResult.swift in Sources */,
+				6C1908FB213E3A77003121A2 /* BaseMock.swift in Sources */,
 				6C83A5702137B22200CE2222 /* AsyncMock.swift in Sources */,
 				6C83A57E2137CC1300CE2222 /* RxyError.swift in Sources */,
 				6C83A57C2137C94E00CE2222 /* Rx+Nimble.swift in Sources */,
@@ -279,6 +290,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6C1908FD213E3C94003121A2 /* BaseMockTests.swift in Sources */,
 				6CA2CB8A213CBD85003B73AB /* AssertionValidator.swift in Sources */,
 				6C83A57A2137C89A00CE2222 /* MockResultTests.swift in Sources */,
 				6CA2CB88213CBBA9003B73AB /* Rx+NimbleTests.swift in Sources */,

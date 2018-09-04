@@ -11,70 +11,70 @@ class Rx_NimbleTests: XCTestCase {
     // MARK: - All Sequences
 
     func testSequenceWaitForError() {
-        expect(Single<Int>.error(RxyError.wrongType).testInBackground().waitForError()).to(matchError(RxyError.wrongType))
+        expect(Single<Int>.error(RxyError.wrongType).executeInBackground().waitForError()).to(matchError(RxyError.wrongType))
     }
 
     func testSequenceWaitForErrorGeneratesNimbleErrorOnCompletation() {
-        expectNimble(failure: "Expected an error, but got a successful completion instead") {
-            Single<Int>.just(5).testInBackground().waitForError()
+        expectNimble(error: "Expected an error, but got a successful completion instead") {
+            Single<Int>.just(5).executeInBackground().waitForError()
         }
     }
 
     // MARK: - Singles
 
     func testSingleWaitForSuccess() {
-        expect(Single<Int>.just(5).testInBackground().waitForSuccess()) == 5
+        expect(Single<Int>.just(5).executeInBackground().waitForSuccess()) == 5
     }
 
     func testSingleWaitForSuccessGeneratesNimbleErrorOnFailure() {
-        expectNimble(failure: "Expected a single value, got error RxyError.wrongType instead") {
-           Single<Int>.error(RxyError.wrongType).testInBackground().waitForSuccess()
+        expectNimble(error: "Expected a single value, got error RxyError.wrongType instead") {
+           Single<Int>.error(RxyError.wrongType).executeInBackground().waitForSuccess()
         }
     }
     
     // MARK: - Maybes
     
     func testMaybeWaitForValue() {
-        expect(Maybe<Int>.just(5).testInBackground().waitForValue()) == 5
+        expect(Maybe<Int>.just(5).executeInBackground().waitForValue()) == 5
     }
 
     func testMaybeWaitForValueGeneratesNimbleErrorOnFailure() {
-        expectNimble(failure: "Expected a value, got error RxyError.wrongType instead") {
-            expect(Maybe<Int>.error(RxyError.wrongType).testInBackground().waitForValue()) == 5
+        expectNimble(error: "Expected a value, got error RxyError.wrongType instead") {
+            expect(Maybe<Int>.error(RxyError.wrongType).executeInBackground().waitForValue()) == 5
         }
     }
 
     func testMaybeWaitForValueGeneratesNimbleErrorOnCompletion() {
-        expectNimble(failure: "Expected a value to be returned, but Maybe completed without one") {
-            expect(Maybe<Int>.empty().testInBackground().waitForValue()) == 5
+        expectNimble(error: "Expected a value to be returned, but Maybe completed without one") {
+            expect(Maybe<Int>.empty().executeInBackground().waitForValue()) == 5
         }
     }
 
     func testMaybeWaitForCompletion() {
-        Maybe<Int>.empty().testInBackground().waitForCompletion()
+        Maybe<Int>.empty().executeInBackground().waitForCompletion()
     }
 
     func testMaybeWaitForCompletionGeneratesNimbleErrorOnFailure() {
-        expectNimble(failure: "Expected successful completion, got a RxyError.wrongType instead") {
-            Maybe<Int>.error(RxyError.wrongType).testInBackground().waitForCompletion()
+        expectNimble(error: "Expected successful completion, got a RxyError.wrongType instead") {
+            Maybe<Int>.error(RxyError.wrongType).executeInBackground().waitForCompletion()
         }
     }
 
     func testMaybeWaitForCompletionGeneratesNimbleErrorWhenValueReturned() {
-        expectNimble(failure: "Expected successful completion without a value, but had a value returned") {
-            Maybe<Int>.just(5).testInBackground().waitForCompletion()
+        expectNimble(error: "Expected successful completion without a value, but had a value returned") {
+            Maybe<Int>.just(5).executeInBackground().waitForCompletion()
         }
     }
     
     // MARK: - Completable
     
     func testCmpletableWaitForCompletion() {
-        Completable.empty().testInBackground().waitForCompletion()
+        Completable.empty().executeInBackground().waitForCompletion()
     }
 
     func testCmpletableWaitForCompletionGeneratesNimbleErrorOnFailure() {
-        expectNimble(failure: "Expected successful completion, got a RxyError.wrongType instead") {
-            Completable.error(RxyError.wrongType).testInBackground().waitForCompletion()
+        expectNimble(error: "Expected successful completion, got a RxyError.wrongType instead") {
+            Completable.error(RxyError.wrongType).executeInBackground().waitForCompletion()
         }
     }
 

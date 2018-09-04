@@ -18,8 +18,8 @@ private class MockSomething: BaseMock {
     }
 }
 
-class AsyncMockTests: XCTestCase {
-
+class BaseMockTests: XCTestCase {
+    
     func testUnexpectedSingle() {
         let mock = MockSomething()
         mock.doSingleThing().waitForSuccess()
