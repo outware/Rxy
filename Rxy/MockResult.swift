@@ -3,77 +3,51 @@
 
 import RxSwift
 
-// MARK: - SingleResult
+/**
+ Base class for all results.
+ 
+ Provides a common error result which all Observables can use.
+*/
+public class BaseResult {
 
-public final class SingleResult<T> {
-    
-    private var error: Error?
-    private var valueClosure: (() -> T)?
+    fileprivate var error: Error?
 
-    // MARK Lifecycle
-    
-    private init(error: Error) {
+    fileprivate init() {}
+
+    required init(error: Error) {
         self.error = error
     }
 
-    private init(value: @autoclosure @escaping () -> T) {
-        self.valueClosure = value
-    }
+    /**
+     Tells the mock to return a Single with an error.
 
-    private init(value: @escaping () -> T) {
-        self.valueClosure = value
-    }
-
-    // MARK: Factory methods
-    
-    public static func `throw`(_ error: Error) -> SingleResult<T> {
-        return SingleResult<T>(error: error)
-    }
-
-    public static func `value`(_ value: T) -> SingleResult<T> {
-        return SingleResult<T>(value: value)
-    }
-
-    public static func `value`(_ value: @escaping () -> T) -> SingleResult<T> {
-        return SingleResult(value: value)
-    }
-
-    // MARK: Tasks
-    
-    func resolve() -> Single<T> {
-        if let valueClosure = valueClosure {
-            return Single.just(valueClosure())
-        }
-        return Single.error(self.error!)
+     - Parameter error: The error to return.
+     - Returns: A Single.
+     */
+    public static func `throw`(_ error: Error) -> Self {
+        return self.init(error: error)
     }
 }
 
 // MARK: - CompletableResult
 
-public final class CompletableResult {
-    
-    private var error: Error?
-    
-    // MARK Lifecycle
-    
-    private init(error: Error) {
-        self.error = error
-    }
-    
-    private init() {}
-    
+/**
+ Defines possible results from mocks representing functions returning a Completable.
+ */
+public final class CompletableResult: BaseResult {
+
     // MARK: Factory methods
-    
-    public static func `throw`(_ error: Error) -> CompletableResult {
-        return self.init(error: error)
-    }
-    
+
+    /**
+     Tells the mock to return a successful result.
+    */
     public static func success() -> CompletableResult {
         return CompletableResult()
     }
-    
+
     // MARK: Tasks
-    
+
+    /// Used internally to resolve the result.
     func resolve() -> Completable {
         if let error = self.error {
             return Completable.error(error)
@@ -82,49 +56,105 @@ public final class CompletableResult {
     }
 }
 
-// MARK: - MaybeResult
+// MARK: - SingleResult
 
-public final class MaybeResult<T> {
-    
-    private var error: Error?
-    private var valueClosure: (() -> T)?
-    
+/// Defines the possible results that can be returned from the mock of a function that returns a Single.
+public final class SingleResult<T>: BaseResult {
+
+    fileprivate var valueClosure: (() -> T)?
+
     // MARK Lifecycle
 
-    private init() {}
+    private convenience init(value: @autoclosure @escaping () -> T) {
+        self.init()
+        self.valueClosure = value
+    }
 
-    private init(error: Error) {
-        self.error = error
-    }
-    
-    private init(value: @autoclosure @escaping () -> T) {
+    private convenience init(value: @escaping () -> T) {
+        self.init()
         self.valueClosure = value
     }
-    
-    private init(value: @escaping () -> T) {
-        self.valueClosure = value
-    }
-    
+
     // MARK: Factory methods
+
+    /**
+     Tells the mock to return the passed value.
+     
+     - Parameter value: The value to return from the Single.
+     */
+    public static func `value`(_ value: T) -> SingleResult<T> {
+        return SingleResult<T>(value: value)
+    }
+
+    /**
+     Tells the mock to return a value which is the result of executing the passed closure.
+     
+     - Parameter value: A closure that produces the value to return from the Single.
+     */
+    public static func `value`(_ value: @escaping () -> T) -> SingleResult<T> {
+        return SingleResult(value: value)
+    }
+
+    // MARK: Tasks
     
+    /// Used internally to resolve the result.
+    func resolve() -> Single<T> {
+        if let valueClosure = valueClosure {
+            return Single<T>.just(valueClosure())
+        }
+        return Single<T>.error(self.error!)
+    }
+}
+
+// MARK: - MaybeResult
+
+/// Defines the possible results that can be returned from the mock of a function that returns a Meybe.
+public final class MaybeResult<T>: BaseResult {
+
+    fileprivate var valueClosure: (() -> T)?
+
+    // MARK Lifecycle
+
+    private convenience init(value: @autoclosure @escaping () -> T) {
+        self.init()
+        self.valueClosure = value
+    }
+
+    private convenience init(value: @escaping () -> T) {
+        self.init()
+        self.valueClosure = value
+    }
+
+    // MARK: Factory methods
+
+    /**
+     Tells the mock to return the passed value.
+     
+     - Parameter value: The value to return from the Maybe.
+     */
+    public static func `value`(_ value: T) -> MaybeResult<T> {
+        return MaybeResult<T>(value: value)
+    }
+
+    /**
+     Tells the mock to return a value which is the result of executing the passed closure.
+     
+     - Parameter value: A closure that produces the value to return from the maybe.
+     */
+    public static func `value`(_ value: @escaping () -> T) -> MaybeResult<T> {
+        return MaybeResult(value: value)
+    }
+
+    /**
+     Tells the mock to successfully complete without returning a value.
+     */
     public static func success() -> MaybeResult<T> {
         return MaybeResult<T>()
     }
     
-    public static func `throw`(_ error: Error) -> MaybeResult<T> {
-        return MaybeResult<T>(error: error)
-    }
-    
-    public static func `value`(_ value: T) -> MaybeResult<T> {
-        return MaybeResult<T>(value: value)
-    }
-    
-    public static func `value`(_ value: @escaping () -> T) -> MaybeResult<T> {
-        return MaybeResult(value: value)
-    }
-    
     // MARK: Tasks
     
+    /// Used internally to resolve the result.
     func resolve() -> Maybe<T> {
         if let valueClosure = valueClosure {
             return Maybe.just(valueClosure())
@@ -135,4 +165,3 @@ public final class MaybeResult<T> {
         return Maybe.empty()
     }
 }
-

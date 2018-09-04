@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		6C1908F7213D0E15003121A2 /* TestSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C1908F6213D0E15003121A2 /* TestSupport.swift */; };
 		6C83A5552137A9B000CE2222 /* Rxy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C83A54B2137A9B000CE2222 /* Rxy.framework */; };
-		6C83A55A2137A9B000CE2222 /* RxyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C83A5592137A9B000CE2222 /* RxyTests.swift */; };
+		6C83A55A2137A9B000CE2222 /* AsyncMockTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C83A5592137A9B000CE2222 /* AsyncMockTests.swift */; };
 		6C83A55C2137A9B000CE2222 /* Rxy.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C83A54E2137A9B000CE2222 /* Rxy.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C83A5692137B07000CE2222 /* RxBlocking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C83A5672137B07000CE2222 /* RxBlocking.framework */; };
 		6C83A56A2137B07000CE2222 /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C83A5682137B07000CE2222 /* Nimble.framework */; };
@@ -59,7 +59,7 @@
 		6C83A54E2137A9B000CE2222 /* Rxy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Rxy.h; sourceTree = "<group>"; };
 		6C83A54F2137A9B000CE2222 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6C83A5542137A9B000CE2222 /* RxyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RxyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		6C83A5592137A9B000CE2222 /* RxyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxyTests.swift; sourceTree = "<group>"; };
+		6C83A5592137A9B000CE2222 /* AsyncMockTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncMockTests.swift; sourceTree = "<group>"; };
 		6C83A55B2137A9B000CE2222 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6C83A5652137AA4200CE2222 /* Cartfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
 		6C83A5672137B07000CE2222 /* RxBlocking.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxBlocking.framework; path = Carthage/Build/iOS/RxBlocking.framework; sourceTree = "<group>"; };
@@ -136,7 +136,7 @@
 		6C83A5582137A9B000CE2222 /* RxyTests */ = {
 			isa = PBXGroup;
 			children = (
-				6C83A5592137A9B000CE2222 /* RxyTests.swift */,
+				6C83A5592137A9B000CE2222 /* AsyncMockTests.swift */,
 				6C83A55B2137A9B000CE2222 /* Info.plist */,
 				6C83A5792137C89A00CE2222 /* MockResultTests.swift */,
 				6CA2CB87213CBBA9003B73AB /* Rx+NimbleTests.swift */,
@@ -283,7 +283,7 @@
 				6C83A57A2137C89A00CE2222 /* MockResultTests.swift in Sources */,
 				6CA2CB88213CBBA9003B73AB /* Rx+NimbleTests.swift in Sources */,
 				6C1908F7213D0E15003121A2 /* TestSupport.swift in Sources */,
-				6C83A55A2137A9B000CE2222 /* RxyTests.swift in Sources */,
+				6C83A55A2137A9B000CE2222 /* AsyncMockTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

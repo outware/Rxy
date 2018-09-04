@@ -6,7 +6,7 @@ import RxSwift
 extension PrimitiveSequence {
     
     /// Quick background processing for tests.
-    func inBackground() -> PrimitiveSequence<Trait, Element> {
+    func testInBackground() -> PrimitiveSequence<Trait, Element> {
         return self.observeOn(MainScheduler.asyncInstance).subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
     }
 }
