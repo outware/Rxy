@@ -15,6 +15,6 @@ class BaseMock: AsyncMock {
     }
     
     func mockFunction<T>(mockedFunction: String = #function, returning result: SingleResult<T>?) -> Single<T> {
-        return mockFunction(mockedInFile: mockedInFile, mockedAtLine: mockedAtLine, mockedFunction: mockedFunction, returning: result)
+        return mockFunction(file: mockedInFile, line: mockedAtLine, function: mockedFunction, returning: result)
     }
 }

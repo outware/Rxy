@@ -6,10 +6,6 @@ import RxSwift
 import Nimble
 @testable import Rxy
 
-private protocol DoSomething {
-    func doSingleThing() -> Single<Int>
-}
-
 private class MockSomething: AsyncMock {
     
     func doUnexpectedMethod() {
@@ -20,6 +16,22 @@ private class MockSomething: AsyncMock {
     func doSingleThing() -> Single<Int> {
         return mockFunction(returning: doSingleThingResult)
     }
+    
+    var doCompletableThingResult: CompletableResult?
+    func doCompletableThing() -> Completable {
+        return mockFunction(returning: doCompletableThingResult)
+    }
+    
+    var doMaybeThingResult: MaybeResult<Int>?
+    func doMaybeThing() -> Maybe<Int> {
+        return mockFunction(returning: doMaybeThingResult)
+    }
+    
+    //    var doDynamicThingResult: SingleResult<Any>?
+    //    func doDynamicThing<T>() -> Single<T> {
+    //        return mockFunction(returning: doDynamicThingResult)
+    //    }
+    
 }
 
 class AsyncMockTests: XCTestCase {
@@ -30,22 +42,54 @@ class AsyncMockTests: XCTestCase {
         mock = MockSomething()
     }
     
+    // MARK: - Core tests
+    
     func testUnexpectedMethodCalled() {
         expectNimble(error: "Unexpected function call AsyncMockTests.doUnexpectedMethod()") {
             mock.doUnexpectedMethod()
         }
     }
     
-    func testMockFunctionReturnsResult() {
+    func testMockFunctionSingleReturnsResult() {
         mock.doSingleThingResult = .value(5)
         let result = mock.doSingleThing().waitForSuccess()
         expect(result) == 5
     }
     
-    func testMockFunctionTriggersUnexpectedMethodCall() {
+    func testMockFunctionSingleTriggersUnexpectedMethodCall() {
         expectNimble(error: "Expected a single value, got error RxyError.unexpectedMethodCall(\"AsyncMockTests.doSingleThing()\") instead") {
             mock.doSingleThing().waitForSuccess()
         }
     }
+    
+    func testMockFunctionCompletableReturnsResult() {
+        mock.doCompletableThingResult = .success()
+        mock.doCompletableThing().waitForCompletion()
+    }
+    
+    func testMockFunctionCompletableTriggersUnexpectedMethodCall() {
+        expectNimble(error: "Expected successful completion, got a RxyError.unexpectedMethodCall(\"AsyncMockTests.doCompletableThing()\") instead") {
+            mock.doCompletableThing().waitForCompletion()
+        }
+    }
+    
+    func testMockFunctionMaybeReturnsResult() {
+        mock.doMaybeThingResult = .success()
+        mock.doMaybeThing().waitForCompletion()
+    }
+    
+    func testMockFunctionMaybeReturnsValue() {
+        mock.doMaybeThingResult = .value(5)
+        let result = mock.doMaybeThing().waitForValue()
+        expect(result) == 5
+    }
+    
+    func testMockFunctionMaybeTriggersUnexpectedMethodCall() {
+        expectNimble(error: "Expected successful completion, got a RxyError.unexpectedMethodCall(\"AsyncMockTests.doMaybeThing()\") instead") {
+            mock.doMaybeThing().waitForCompletion()
+        }
+    }
+    
+    // MARK: - Complex examples
     
 }
