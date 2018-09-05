@@ -6,5 +6,3 @@ import RxSwift
 enum TestError: Error {
     case anError
 }
-
-

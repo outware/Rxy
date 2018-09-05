@@ -4,6 +4,8 @@
 import XCTest
 import Nimble
 
+// MARK: - Testing support code
+
 /// Class which is used to track and report on the status of Nimble errors encountered in a closure.
 class ErrorLocation {
     
