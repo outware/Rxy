@@ -10,7 +10,7 @@ class MockResultTests: XCTestCase {
     // MARK: - SingleResult
 
     func testSingleResultResolvesError() {
-        expect(SingleResult<Int>.throw(RxyError.wrongType).resolve().executeInBackground().waitForError()).to(matchError(RxyError.wrongType))
+        expect(SingleResult<Int>.throw(TestError.anError).resolve().executeInBackground().waitForError()).to(matchError(TestError.anError))
     }
 
     func testSingleResultResolvesValue() {
@@ -28,7 +28,7 @@ class MockResultTests: XCTestCase {
     // MARK: - CompletableResult
 
     func testCompletableResultResolvesError() {
-        expect(CompletableResult.throw(RxyError.wrongType).resolve().executeInBackground().waitForError()).to(matchError(RxyError.wrongType))
+        expect(CompletableResult.throw(TestError.anError).resolve().executeInBackground().waitForError()).to(matchError(TestError.anError))
     }
 
     func testCompletableResultResolvesSuccess() {
@@ -38,7 +38,7 @@ class MockResultTests: XCTestCase {
     // MARK: - MaybeResult
     
     func testMaybeResultResolvesError() {
-        expect(MaybeResult<Int>.throw(RxyError.wrongType).resolve().executeInBackground().waitForError()).to(matchError(RxyError.wrongType))
+        expect(MaybeResult<Int>.throw(TestError.anError).resolve().executeInBackground().waitForError()).to(matchError(TestError.anError))
     }
     
     func testMaybeResultResolvesValue() {

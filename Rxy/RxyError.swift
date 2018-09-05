@@ -1,8 +1,13 @@
 
 //  Copyright © 2018 Derek Clarkson. All rights reserved.
 
+/// Errors that Rxy can generate.
 public enum RxyError: Error {
-    case wrongType
+    
+    /// Thrown when a result value cannot be cast to the desired type for the Observable.
+    case wrongType(expected: Any, found: Any)
+    
+    /// Thrown when a method is called for which the result is nil.
     case unexpectedMethodCall(String)
 }
 

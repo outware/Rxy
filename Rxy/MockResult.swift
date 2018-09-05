@@ -34,7 +34,7 @@ public class BaseResult {
 /**
  Defines possible results from mocks representing functions returning a Completable.
  */
-public final class CompletableResult: BaseResult, Resolvable {
+public final class CompletableResult: BaseResult {
 
     // MARK: Factory methods
 
@@ -54,11 +54,6 @@ public final class CompletableResult: BaseResult, Resolvable {
         }
         return Completable.empty()
     }
-}
-
-protocol Resolvable {
-    associatedtype ObservableType
-    func resolve() -> ObservableType
 }
 
 // MARK: - SingleResult

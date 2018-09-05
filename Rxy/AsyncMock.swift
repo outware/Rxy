@@ -26,7 +26,7 @@ extension AsyncMock {
     /// ```
     ///
     func unexpectedFunctionCall(file: String = #file, line: UInt = #line, function: String = #function) {
-        fail("Unexpected function call \(file.filename(withFunction: function))", file: file, line: line)
+        fail("Unexpected function call \(function)", file: file, line: line)
     }
 
     /// Use when you need to mock a call to a function that returns a Completable.
@@ -47,25 +47,62 @@ extension AsyncMock {
     /// - Returns: A Completable that executes on a background thread.
     func mockFunction(file: String = #file, line: UInt = #line, function: String = #function, returning result: CompletableResult?) -> Completable {
         guard let result = result else {
-            unexpectedFunctionCall(file: file, line: line, function: function)
-            return .error(RxyError.unexpectedMethodCall("\(file.filename(withFunction: function))"))
+            return .error(reportUnexpectedCall(file: file, line: line, function: function))
         }
         return result.resolve().executeInBackground()
     }
 
     func mockFunction<T>(file: String = #file, line: UInt = #line, function: String = #function, returning result: SingleResult<T>?) -> Single<T> {
         guard let result = result else {
-            unexpectedFunctionCall(file: file, line: line, function: function)
-            return .error(RxyError.unexpectedMethodCall("\(file.filename(withFunction: function))"))
+            return .error(reportUnexpectedCall(file: file, line: line, function: function))
         }
         return result.resolve().executeInBackground()
     }
 
     func mockFunction<T>(file: String = #file, line: UInt = #line, function: String = #function, returning result: MaybeResult<T>?) -> Maybe<T> {
         guard let result = result else {
-            unexpectedFunctionCall(file: file, line: line, function: function)
-            return .error(RxyError.unexpectedMethodCall("\(file.filename(withFunction: function))"))
+            return .error(reportUnexpectedCall(file: file, line: line, function: function))
         }
         return result.resolve().executeInBackground()
+    }
+
+    // MARK: - Dynamic variations
+
+    func mockFunction<T>(file: String = #file, line: UInt = #line, function: String = #function, returning result: SingleResult<Any>?) -> Single<T> {
+
+        guard let result = result else {
+            return .error(reportUnexpectedCall(file: file, line: line, function: function))
+        }
+
+        return result.resolve().map { value -> T in
+            if let castValue = value as? T {
+                return castValue
+            }
+            fail("Expected to return a \(T.self), but got a \(type(of: value)) instead.", file: file, line: line)
+            throw RxyError.wrongType(expected: T.self, found: type(of: value))
+            }
+            .executeInBackground()
+    }
+
+    func mockFunction<T>(file: String = #file, line: UInt = #line, function: String = #function, returning result: MaybeResult<Any>?) -> Maybe<T> {
+        
+        guard let result = result else {
+            return .error(reportUnexpectedCall(file: file, line: line, function: function))
+        }
+        
+        return result.resolve().map { value -> T in
+            if let castValue = value as? T {
+                return castValue
+            }
+            fail("Expected to return a \(T.self), but got a \(type(of: value)) instead.", file: file, line: line)
+            throw RxyError.wrongType(expected: T.self, found: type(of: value))
+            }
+            .executeInBackground()
+    }
+
+    // Reports on the error
+    private func reportUnexpectedCall(file: String, line: UInt, function: String) -> Error {
+        unexpectedFunctionCall(file: file, line: line, function: function)
+        return RxyError.unexpectedMethodCall(function)
     }
 }

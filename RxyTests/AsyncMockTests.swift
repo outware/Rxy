@@ -27,11 +27,17 @@ private class MockSomething: AsyncMock {
         return mockFunction(returning: doMaybeThingResult)
     }
     
-    //    var doDynamicThingResult: SingleResult<Any>?
-    //    func doDynamicThing<T>() -> Single<T> {
-    //        return mockFunction(returning: doDynamicThingResult)
-    //    }
+    // MARK: Dynamic results
     
+    var doDynamicSingleThingResult: SingleResult<Any>?
+    func doDynamicSingleThing<T>() -> Single<T> {
+        return mockFunction(returning: doDynamicSingleThingResult)
+    }
+
+    var doDynamicMaybeThingResult: MaybeResult<Any>?
+    func doDynamicMaybeThing<T>() -> Maybe<T> {
+        return mockFunction(returning: doDynamicMaybeThingResult)
+    }
 }
 
 class AsyncMockTests: XCTestCase {
@@ -45,7 +51,7 @@ class AsyncMockTests: XCTestCase {
     // MARK: - Core tests
     
     func testUnexpectedMethodCalled() {
-        expectNimble(error: "Unexpected function call AsyncMockTests.doUnexpectedMethod()") {
+        expectNimble(error: "Unexpected function call doUnexpectedMethod()") {
             mock.doUnexpectedMethod()
         }
     }
@@ -57,7 +63,7 @@ class AsyncMockTests: XCTestCase {
     }
     
     func testMockFunctionSingleTriggersUnexpectedMethodCall() {
-        expectNimble(error: "Expected a single value, got error RxyError.unexpectedMethodCall(\"AsyncMockTests.doSingleThing()\") instead") {
+        expectNimble(error: "Expected a single value, got error RxyError.unexpectedMethodCall(\"doSingleThing()\") instead") {
             mock.doSingleThing().waitForSuccess()
         }
     }
@@ -68,7 +74,7 @@ class AsyncMockTests: XCTestCase {
     }
     
     func testMockFunctionCompletableTriggersUnexpectedMethodCall() {
-        expectNimble(error: "Expected successful completion, got a RxyError.unexpectedMethodCall(\"AsyncMockTests.doCompletableThing()\") instead") {
+        expectNimble(error: "Expected successful completion, got a RxyError.unexpectedMethodCall(\"doCompletableThing()\") instead") {
             mock.doCompletableThing().waitForCompletion()
         }
     }
@@ -85,11 +91,56 @@ class AsyncMockTests: XCTestCase {
     }
     
     func testMockFunctionMaybeTriggersUnexpectedMethodCall() {
-        expectNimble(error: "Expected successful completion, got a RxyError.unexpectedMethodCall(\"AsyncMockTests.doMaybeThing()\") instead") {
+        expectNimble(error: "Expected successful completion, got a RxyError.unexpectedMethodCall(\"doMaybeThing()\") instead") {
             mock.doMaybeThing().waitForCompletion()
         }
     }
     
     // MARK: - Complex examples
+
+    func testDynamicSingleExample() {
+
+        // First a int
+        mock.doDynamicSingleThingResult = .value(5)
+        let result1: Int? = mock.doDynamicSingleThing().waitForSuccess()
+        expect(result1) == 5
+
+        // Then a string
+        mock.doDynamicSingleThingResult = .value("abc")
+        let result2: String? = mock.doDynamicSingleThing().waitForSuccess()
+        expect(result2) == "abc"
+    }
+
+    func testDynamicSingleExampleWithTypeCastFailure() {
+        
+        mock.doDynamicSingleThingResult = .value("abc")
+        
+        expectNimble(error: "Expected a single value, got error RxyError.wrongType(expected: Swift.Int, found: Swift.String) instead") {
+            let _: Int? = mock.doDynamicSingleThing().waitForSuccess()
+        }
+    }
     
+    func testDynamicMaybeExample() {
+        
+        // First a int
+        mock.doDynamicMaybeThingResult = .value(5)
+        let result1: Int? = mock.doDynamicMaybeThing().waitForValue()
+        expect(result1) == 5
+        
+        // Then a string
+        mock.doDynamicMaybeThingResult = .value("abc")
+        let result2: String? = mock.doDynamicMaybeThing().waitForValue()
+        expect(result2) == "abc"
+    }
+    
+    func testDynamicMaybeExampleWithTypeCastFailure() {
+        
+        mock.doDynamicMaybeThingResult = .value("abc")
+        
+        expectNimble(error: "Expected a value, got error RxyError.wrongType(expected: Swift.Int, found: Swift.String) instead") {
+            let _: Int? = mock.doDynamicMaybeThing().waitForValue()
+        }
+    }
+
+
 }

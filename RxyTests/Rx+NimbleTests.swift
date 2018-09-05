@@ -11,7 +11,7 @@ class Rx_NimbleTests: XCTestCase {
     // MARK: - All Sequences
 
     func testSequenceWaitForError() {
-        expect(Single<Int>.error(RxyError.wrongType).executeInBackground().waitForError()).to(matchError(RxyError.wrongType))
+        expect(Single<Int>.error(TestError.anError).executeInBackground().waitForError()).to(matchError(TestError.anError))
     }
 
     func testSequenceWaitForErrorGeneratesNimbleErrorOnCompletation() {
@@ -27,8 +27,8 @@ class Rx_NimbleTests: XCTestCase {
     }
 
     func testSingleWaitForSuccessGeneratesNimbleErrorOnFailure() {
-        expectNimble(error: "Expected a single value, got error RxyError.wrongType instead") {
-           Single<Int>.error(RxyError.wrongType).executeInBackground().waitForSuccess()
+        expectNimble(error: "Expected a single value, got error TestError.anError instead") {
+           Single<Int>.error(TestError.anError).executeInBackground().waitForSuccess()
         }
     }
     
@@ -39,8 +39,8 @@ class Rx_NimbleTests: XCTestCase {
     }
 
     func testMaybeWaitForValueGeneratesNimbleErrorOnFailure() {
-        expectNimble(error: "Expected a value, got error RxyError.wrongType instead") {
-            expect(Maybe<Int>.error(RxyError.wrongType).executeInBackground().waitForValue()) == 5
+        expectNimble(error: "Expected a value, got error TestError.anError instead") {
+            expect(Maybe<Int>.error(TestError.anError).executeInBackground().waitForValue()) == 5
         }
     }
 
@@ -55,8 +55,8 @@ class Rx_NimbleTests: XCTestCase {
     }
 
     func testMaybeWaitForCompletionGeneratesNimbleErrorOnFailure() {
-        expectNimble(error: "Expected successful completion, got a RxyError.wrongType instead") {
-            Maybe<Int>.error(RxyError.wrongType).executeInBackground().waitForCompletion()
+        expectNimble(error: "Expected successful completion, got a TestError.anError instead") {
+            Maybe<Int>.error(TestError.anError).executeInBackground().waitForCompletion()
         }
     }
 
@@ -73,8 +73,8 @@ class Rx_NimbleTests: XCTestCase {
     }
 
     func testCmpletableWaitForCompletionGeneratesNimbleErrorOnFailure() {
-        expectNimble(error: "Expected successful completion, got a RxyError.wrongType instead") {
-            Completable.error(RxyError.wrongType).executeInBackground().waitForCompletion()
+        expectNimble(error: "Expected successful completion, got a TestError.anError instead") {
+            Completable.error(TestError.anError).executeInBackground().waitForCompletion()
         }
     }
 
