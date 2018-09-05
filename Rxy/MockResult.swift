@@ -36,7 +36,7 @@ public class BaseResult {
  */
 public final class CompletableResult: BaseResult {
 
-    // MARK: Factory methods
+    // MARK: Factory functions
 
     /**
      Tells the mock to return a successful result.
@@ -75,7 +75,7 @@ public final class SingleResult<T>: BaseResult {
         self.valueClosure = value
     }
 
-    // MARK: Factory methods
+    // MARK: Factory functions
 
     /**
      Tells the mock to return the passed value.
@@ -125,7 +125,7 @@ public final class MaybeResult<T>: BaseResult {
         self.valueClosure = value
     }
 
-    // MARK: Factory methods
+    // MARK: Factory functions
 
     /**
      Tells the mock to return the passed value.

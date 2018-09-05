@@ -4,7 +4,7 @@ Rxy is a bunch of useful functions and classes that can help you to simplify tes
 
 ## AsyncMock
 
-AsyncMock is an extension that provides methods for asynchronously returning values from mocking that return RxSwift observables.  
+AsyncMock is an extension that provides functions for asynchronously returning values from mocking that return RxSwift observables.  
 
 When writing mocks for testing, developer usually write code like this:
 
