@@ -61,7 +61,12 @@ class AsyncMockTests: XCTestCase {
         let result = mock.doSingleThing().waitForSuccess()
         expect(result) == 5
     }
-    
+
+    func testMockFunctionSingleReturnsError() {
+        mock.doSingleThingResult = .throw(TestError.anError)
+        expect(self.mock.doSingleThing().waitForError()).to(matchError(TestError.anError))
+    }
+
     func testMockFunctionSingleTriggersUnexpectedFunctionCall() {
         expectNimble(error: "Expected a single value, got error RxyError.unexpectedFunctionCall(\"doSingleThing()\") instead") {
             mock.doSingleThing().waitForSuccess()
@@ -69,7 +74,7 @@ class AsyncMockTests: XCTestCase {
     }
     
     func testMockFunctionCompletableReturnsResult() {
-        mock.doCompletableThingResult = .success()
+        mock.doCompletableThingResult = .completed()
         mock.doCompletableThing().waitForCompletion()
     }
     
@@ -80,7 +85,7 @@ class AsyncMockTests: XCTestCase {
     }
     
     func testMockFunctionMaybeReturnsResult() {
-        mock.doMaybeThingResult = .success()
+        mock.doMaybeThingResult = .completed()
         mock.doMaybeThing().waitForCompletion()
     }
     

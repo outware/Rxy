@@ -9,6 +9,8 @@ public enum RxyError: Error {
     
     /// Thrown when a function is called for which the result is nil.
     case unexpectedFunctionCall(String)
+    
+    case invalidJSON
 }
 
 //extension RxyError: Equatable {
