@@ -5,12 +5,12 @@ import XCTest
 import Rxy
 import RxSwift
 import Nimble
+import RxBlocking
 
 class Rx_ThreadingTests: XCTestCase {
     
     func testThreadExecutesInBackground() {
-        let disposeBag = DisposeBag()
-        Completable.create { completable in
+        _ = Completable.create { completable in
 
             // Background thread validation
             expect(Thread.isMainThread).to(beFalse())
@@ -20,23 +20,11 @@ class Rx_ThreadingTests: XCTestCase {
             }
             
             // Test
-            .executeInBackground()
-            
-            // Validate
-            .subscribe(
-                onCompleted:{
-                    expect(Thread.isMainThread).to(beTrue())
-            },
-                onError: { error in
-                    fail("\(error)")
-            }
-            )
-            .disposed(by: disposeBag)
+            .executeInBackground().toBlocking()
     }
 
     func testThreadExecutesInBackgroundWithCustomSchedular() {
-        let disposeBag = DisposeBag()
-        Completable.create { completable in
+        _ = Completable.create { completable in
             
             // Custom thread validation
             expect(Thread.isMainThread).to(beTrue())
@@ -46,17 +34,6 @@ class Rx_ThreadingTests: XCTestCase {
             }
             
             // Test
-            .executeInBackground(observeOn: MainScheduler.asyncInstance)
-            
-            // Validate
-            .subscribe(
-                onCompleted:{
-                    expect(Thread.isMainThread).to(beTrue())
-            },
-                onError: { error in
-                    fail("\(error)")
-            }
-            )
-            .disposed(by: disposeBag)
+            .executeInBackground(observeOn: MainScheduler.asyncInstance).toBlocking()
     }
 }

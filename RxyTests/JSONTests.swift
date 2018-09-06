@@ -16,19 +16,28 @@ class Obj: Decodable {
 }
 
 class JSONTests: XCTestCase {
-    
-    func testLoadFromJSON() {
-        
-        let json =
-        """
+
+    let json =
+    """
         {
         "value": "abc"
         }
         """
-        
+
+    func testLoadSingleFromJSON() {
+        let result = SingleResult<Obj>.json(json).resolve().waitForSuccess()
+        expect(result?.value) == "abc"
+    }
+
+    func testLoadMaybeFromJSON() {
         let result = MaybeResult<Obj>.json(json).resolve().waitForValue()
         expect(result?.value) == "abc"
-        
     }
-    
+
+    func testLoadInvalidJSON() {
+        expectNimble(error: "The given data was not valid JSON.", usingMatcher: { $0.contains($1) }) {
+            SingleResult<Obj>.json("abc").resolve().waitForSuccess()
+        }
+    }
+
 }
