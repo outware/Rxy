@@ -11,7 +11,10 @@ public enum RxyError: Error {
     case unexpectedFunctionCall(String)
     
     case invalidJSON
-    
+
+    /// Error decoding JSON into an object.
+    case decodingError(expected: Any, fromJSON: String, error: Error)
+
     /// Should never be thrown.
     case errorNotFound
 }

@@ -15,7 +15,11 @@ class Obj: Decodable {
     let value: String
 }
 
-class JSONTests: XCTestCase {
+class OtherObj: Decodable {
+    let number: Int
+}
+
+class JSONFactoryTests: XCTestCase {
 
     let json =
     """
@@ -37,6 +41,12 @@ class JSONTests: XCTestCase {
     func testLoadInvalidJSON() {
         expectNimble(error: "The given data was not valid JSON.", usingMatcher: { $0.contains($1) }) {
             SingleResult<Obj>.json("abc").resolve().waitForSuccess()
+        }
+    }
+
+    func testLoadWrongType() {
+        expectNimble(error: "RxyError.decodingError", usingMatcher: { $0.contains($1) }) {
+            SingleResult<OtherObj>.json(json).resolve().waitForSuccess()
         }
     }
 

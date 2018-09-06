@@ -101,7 +101,7 @@ public final class SingleResult<T>: ErrorFactory, ValueFactory, Resolvable {
     
     var resolve: () -> Single<T>
     
-    fileprivate init(resolver: SingleResolver<T>) {
+    init(resolver: SingleResolver<T>) {
         self.resolve = resolver.resolve
     }
     
@@ -129,47 +129,5 @@ public final class MaybeResult<T>: ErrorFactory, ValueFactory, CompletionFactory
     
     public init(value: @escaping () -> T) {
         self.resolve = MaybeResolver<T>(value: value).resolve
-    }
-}
-
-// MARK: - JSON
-
-/**
- Defines JSON results for Decodable instances.
- */
-public protocol JSONFactory {
-    
-    init(json: String)
-    /**
-     Source a result from JSON in a passed string.
-     
-     - Parameter json: A String containing valid JSON.
-     - Returns: an instance of the Result.
-     */
-    static func json(_ json: String) -> Self
-}
-
-/// Factory method for all value factory instances.
-public extension JSONFactory where Self: ValueFactory, Self.Element: Decodable {
-    
-    public static func json(_ json: String) -> Self {
-        return self.init(json: json)
-    }
-}
-
-/// Extensions giving access to the json initializers.
-
-extension SingleResult: JSONFactory where T: Decodable {
-    
-    public convenience init(json: String) {
-        self.init(resolver: SingleResolver<T>(json: json))
-    }
-}
-
-extension MaybeResult: JSONFactory where T: Decodable {
-    
-    public convenience init(json: String) {
-        self.init()
-        self.resolve = MaybeResolver<T>(json: json).resolve
     }
 }

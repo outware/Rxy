@@ -22,7 +22,7 @@ class BaseResolver {
 /// Base resolver for resolvers that can produce values.
 class ValueResolver<T>: BaseResolver {
     
-    fileprivate var valueClosure: (() throws -> T)?
+    var valueClosure: (() throws -> T)?
     
     // MARK Lifecycle
     
@@ -97,23 +97,3 @@ final class MaybeResolver<T>: ValueResolver<T>, Resolver {
         )
     }
 }
-
-// MARK: - JSON
-
-extension ValueResolver where T: Decodable {
-    
-    convenience init(json: String) {
-        
-        self.init()
-        self.valueClosure = {
-            
-            let decoder = JSONDecoder.init()
-            if let jsonData = json.data(using: .utf8) {
-                return try decoder.decode(T.self, from: jsonData)
-            }
-            
-            throw RxyError.invalidJSON
-        }
-    }
-}
-

@@ -14,7 +14,7 @@
 		6C199509213FA67C00B4673D /* Rx+ThreadingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C199508213FA67C00B4673D /* Rx+ThreadingTests.swift */; };
 		6C3BBB2E2140C7FC00EB05DD /* MockResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C3BBB2D2140C7FC00EB05DD /* MockResolver.swift */; };
 		6C3BBB302140CB0B00EB05DD /* MockResultTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C3BBB2F2140CB0B00EB05DD /* MockResultTests.swift */; };
-		6C3BBB322140E1E800EB05DD /* JSONTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C3BBB312140E1E800EB05DD /* JSONTests.swift */; };
+		6C3BBB322140E1E800EB05DD /* JSONFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C3BBB312140E1E800EB05DD /* JSONFactoryTests.swift */; };
 		6C83A5552137A9B000CE2222 /* Rxy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C83A54B2137A9B000CE2222 /* Rxy.framework */; };
 		6C83A55A2137A9B000CE2222 /* AsyncMockTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C83A5592137A9B000CE2222 /* AsyncMockTests.swift */; };
 		6C83A55C2137A9B000CE2222 /* Rxy.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C83A54E2137A9B000CE2222 /* Rxy.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -33,6 +33,7 @@
 		6CA2CB8A213CBD85003B73AB /* AssertionValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CA2CB89213CBD85003B73AB /* AssertionValidator.swift */; };
 		6CA2CB8E213CE164003B73AB /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C83A5682137B07000CE2222 /* Nimble.framework */; };
 		6CA2CB8F213CE171003B73AB /* Nimble.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C83A5682137B07000CE2222 /* Nimble.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		6CA5C1CA2141465E00C04584 /* JSONFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CA5C1C92141465E00C04584 /* JSONFactory.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,7 +69,7 @@
 		6C199508213FA67C00B4673D /* Rx+ThreadingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Rx+ThreadingTests.swift"; sourceTree = "<group>"; };
 		6C3BBB2D2140C7FC00EB05DD /* MockResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockResolver.swift; sourceTree = "<group>"; };
 		6C3BBB2F2140CB0B00EB05DD /* MockResultTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockResultTests.swift; sourceTree = "<group>"; };
-		6C3BBB312140E1E800EB05DD /* JSONTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONTests.swift; sourceTree = "<group>"; };
+		6C3BBB312140E1E800EB05DD /* JSONFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONFactoryTests.swift; sourceTree = "<group>"; };
 		6C83A54B2137A9B000CE2222 /* Rxy.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Rxy.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C83A54E2137A9B000CE2222 /* Rxy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Rxy.h; sourceTree = "<group>"; };
 		6C83A54F2137A9B000CE2222 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -87,6 +88,7 @@
 		6C83A57D2137CC1300CE2222 /* RxyError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxyError.swift; sourceTree = "<group>"; };
 		6CA2CB87213CBBA9003B73AB /* Rx+NimbleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Rx+NimbleTests.swift"; sourceTree = "<group>"; };
 		6CA2CB89213CBD85003B73AB /* AssertionValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssertionValidator.swift; sourceTree = "<group>"; };
+		6CA5C1C92141465E00C04584 /* JSONFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONFactory.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -146,6 +148,7 @@
 				6C1908F8213E2A08003121A2 /* Rx+Threading.swift */,
 				6C83A54E2137A9B000CE2222 /* Rxy.h */,
 				6C83A57D2137CC1300CE2222 /* RxyError.swift */,
+				6CA5C1C92141465E00C04584 /* JSONFactory.swift */,
 			);
 			path = Rxy;
 			sourceTree = "<group>";
@@ -162,7 +165,7 @@
 				6C1908F6213D0E15003121A2 /* TestSupport.swift */,
 				6C199508213FA67C00B4673D /* Rx+ThreadingTests.swift */,
 				6C3BBB2F2140CB0B00EB05DD /* MockResultTests.swift */,
-				6C3BBB312140E1E800EB05DD /* JSONTests.swift */,
+				6C3BBB312140E1E800EB05DD /* JSONFactoryTests.swift */,
 			);
 			path = RxyTests;
 			sourceTree = "<group>";
@@ -295,6 +298,7 @@
 				6C83A5702137B22200CE2222 /* AsyncMock.swift in Sources */,
 				6C83A57E2137CC1300CE2222 /* RxyError.swift in Sources */,
 				6C3BBB2E2140C7FC00EB05DD /* MockResolver.swift in Sources */,
+				6CA5C1CA2141465E00C04584 /* JSONFactory.swift in Sources */,
 				6C83A57C2137C94E00CE2222 /* Rx+Nimble.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -307,7 +311,7 @@
 				6CA2CB8A213CBD85003B73AB /* AssertionValidator.swift in Sources */,
 				6C83A57A2137C89A00CE2222 /* MockResolverTests.swift in Sources */,
 				6CA2CB88213CBBA9003B73AB /* Rx+NimbleTests.swift in Sources */,
-				6C3BBB322140E1E800EB05DD /* JSONTests.swift in Sources */,
+				6C3BBB322140E1E800EB05DD /* JSONFactoryTests.swift in Sources */,
 				6C3BBB302140CB0B00EB05DD /* MockResultTests.swift in Sources */,
 				6C1908F7213D0E15003121A2 /* TestSupport.swift in Sources */,
 				6C83A55A2137A9B000CE2222 /* AsyncMockTests.swift in Sources */,
