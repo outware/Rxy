@@ -99,6 +99,9 @@ public extension PrimitiveSequence where Trait == MaybeTrait {
 
 public extension PrimitiveSequence where Trait == CompletableTrait, Element == Never {
     
+    /**
+     Waits for a Completable to complete.
+    */
     public func waitForCompletion(file: FileString = #file, line: UInt = #line) {
         if case let .failed(elements: _, error: error) = result {
             fail("Expected successful completion, got a \(error.typeDescription) instead", file: file, line: line)

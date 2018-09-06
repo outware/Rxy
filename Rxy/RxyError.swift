@@ -11,18 +11,15 @@ public enum RxyError: Error {
     case unexpectedFunctionCall(String)
     
     case invalidJSON
+    
+    /// Should never be thrown.
+    case errorNotFound
 }
 
-//extension RxyError: Equatable {
-//    public static func == (lhs: RxyError, rhs: RxyError) -> Bool {
-//        switch (lhs, rhs) {
-//        case (.wrongType, .wrongType):
-//            return true
-//        }
-//    }
-//}
-
+/// Extensions to errors.
 extension Error {
+    
+    /// Used during error reporting, gives a fuller description of the error.
     var typeDescription: String {
         return "\(type(of:self)).\(self)"
     }

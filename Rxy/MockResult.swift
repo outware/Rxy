@@ -3,8 +3,13 @@
 
 import RxSwift
 
-public protocol ErrorFactory {
+/**
+ Result objects are used to provide result values to mock calls.
+ */
 
+/// Defines the 'throw(...)' function for results.
+public protocol ErrorFactory {
+    
     init(error: Error)
 
     /**
@@ -16,30 +21,36 @@ public protocol ErrorFactory {
     static func `throw`(_ error: Error) -> Self
 }
 
-public protocol ValueFactory: ErrorFactory {
-    associatedtype Element
-    init(value: @escaping () -> Element)
-    static func `value`(_ value: @autoclosure @escaping () -> Element) -> Self
-    static func `value`(_ value: @escaping () -> Element) -> Self
-}
-
-public protocol CompletionFactory: ErrorFactory {
-    init()
-    static func completed() -> Self
-}
-
 public extension ErrorFactory {
-
+    
     public static func `throw`(_ error: Error) -> Self {
         return self.init(error: error)
     }
 }
 
-public extension CompletionFactory {
+/// Defines functions for returning value results.
+public protocol ValueFactory: ErrorFactory {
+
+    /// The type of the value.
+    associatedtype Element
     
-    public static func completed() -> Self {
-        return self.init()
-    }
+    init(value: @escaping () -> Element)
+
+    /**
+     Sets a value.
+     
+     - Parameter value: The value to be returned.
+     - Returns: An instance of the result.
+    */
+    static func `value`(_ value: @autoclosure @escaping () -> Element) -> Self
+
+    /**
+     Sets a closure which returns a value.
+     
+     - Parameter value: The closure to execute.
+     - Returns: An instance of the result.
+     */
+    static func `value`(_ value: @escaping () -> Element) -> Self
 }
 
 public extension ValueFactory {
@@ -53,8 +64,25 @@ public extension ValueFactory {
     }
 }
 
-// MARK: - CompletableResult
+/// Defines the 'completed()' function for results.
+public protocol CompletionFactory: ErrorFactory {
 
+    init()
+
+    /// Tells the mock to complete without a value.
+    static func completed() -> Self
+}
+
+public extension CompletionFactory {
+    
+    public static func completed() -> Self {
+        return self.init()
+    }
+}
+
+// MARK: - Implementations
+
+/// Result type for mocks which return a Completable. CompletableResults can return completed or errors.
 public final class CompletableResult: ErrorFactory, CompletionFactory, Resolvable {
     
     var resolve: () -> Completable
@@ -68,11 +96,14 @@ public final class CompletableResult: ErrorFactory, CompletionFactory, Resolvabl
     }
 }
 
-// MARK: - SingleResult
-
+/// Result type for mocks which return a Single. SingleResults can return values or errors.
 public final class SingleResult<T>: ErrorFactory, ValueFactory, Resolvable {
     
     var resolve: () -> Single<T>
+    
+    fileprivate init(resolver: SingleResolver<T>) {
+        self.resolve = resolver.resolve
+    }
     
     public init(error: Error) {
         self.resolve = SingleResolver<T>(error: error).resolve
@@ -83,11 +114,9 @@ public final class SingleResult<T>: ErrorFactory, ValueFactory, Resolvable {
     }
 }
 
-// MARK: - MaybeResult
-
-/// Defines the possible results that can be returned from the mock of a function that returns a Meybe.
+/// Result type for mocks which return a Maybe. MaybeResults can return values, completed or errors.
 public final class MaybeResult<T>: ErrorFactory, ValueFactory, CompletionFactory, Resolvable {
-
+    
     var resolve: () -> Maybe<T>
     
     public init() {
@@ -101,31 +130,46 @@ public final class MaybeResult<T>: ErrorFactory, ValueFactory, CompletionFactory
     public init(value: @escaping () -> T) {
         self.resolve = MaybeResolver<T>(value: value).resolve
     }
-    
 }
 
-//
-//// MARK: - JSON
-//
-//protocol JSONLoadable {
-//    static func `jsonValue`(_ json: String) -> Self
-//}
-//
-//extension JSONLoadable where Self: ValueResult, Self.Element: Decodable {
-//
-//    static func `jsonValue`(_ json: String) -> Self {
-//        let decoder = JSONDecoder.init()
-//        if let jsonData = json.data(using: .utf8) {
-//            do {
-//                let obj = try decoder.decode(Element.self, from: jsonData)
-//                return value { obj }
-//            }
-//            catch let error {
-//                return self.throw(error)
-//            }
-//        }
-//
-//        return self.throw(RxyError.invalidJSON)
-//    }
-//}
+// MARK: - JSON
 
+/**
+ Defines JSON results for Decodable instances.
+ */
+public protocol JSONFactory {
+    
+    init(json: String)
+    /**
+     Source a result from JSON in a passed string.
+     
+     - Parameter json: A String containing valid JSON.
+     - Returns: an instance of the Result.
+     */
+    static func json(_ json: String) -> Self
+}
+
+/// Factory method for all value factory instances.
+public extension JSONFactory where Self: ValueFactory, Self.Element: Decodable {
+    
+    public static func json(_ json: String) -> Self {
+        return self.init(json: json)
+    }
+}
+
+/// Extensions giving access to the json initializers.
+
+extension SingleResult: JSONFactory where T: Decodable {
+    
+    public convenience init(json: String) {
+        self.init(resolver: SingleResolver<T>(json: json))
+    }
+}
+
+extension MaybeResult: JSONFactory where T: Decodable {
+    
+    public convenience init(json: String) {
+        self.init()
+        self.resolve = MaybeResolver<T>(json: json).resolve
+    }
+}

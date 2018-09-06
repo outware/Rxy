@@ -4,10 +4,10 @@
 import RxSwift
 
 /**
- Base class for all results.
- 
- Provides a common error result which all Observables can use.
+ Resolvers provide the implementations for produce results for mocked calls.
  */
+
+/// Base resolver for all resolves. Can produce an error result or a void result.
 class BaseResolver {
     
     fileprivate var error: Error?
@@ -19,31 +19,55 @@ class BaseResolver {
     }
 }
 
+/// Base resolver for resolvers that can produce values.
 class ValueResolver<T>: BaseResolver {
     
-    fileprivate var valueClosure: (() -> T)?
+    fileprivate var valueClosure: (() throws -> T)?
     
     // MARK Lifecycle
     
-    convenience init(value: @escaping () -> T) {
+    convenience init(value: @escaping () throws -> T) {
         self.init()
         self.valueClosure = value
     }
+    
+    /// Shared core logic for processing values.
+    func resolveValue<O>(success: (T) -> O, failure: (Error) -> O, completion: () -> O) -> O {
+        
+        if let valueClosure = valueClosure {
+            do {
+                return success(try valueClosure())
+            }
+            catch let error {
+                return failure(error)
+            }
+        }
+        
+        if let error = self.error {
+            return failure(error)
+        }
+        
+        return completion()
+    }
+    
 }
 
+/// Resolvers can resolve a result of a mocked call.
 protocol Resolver {
     associatedtype Sequence
     func resolve() -> Sequence
 }
 
+/// Resolvables can be asked to resolve a result.
 protocol Resolvable {
     associatedtype Sequence
     var resolve: () -> Sequence { get set }
 }
 
+// MARK: - Instances
+
 final class CompletableResolver: BaseResolver, Resolver {
     
-    /// Used internally to resolve the result.
     func resolve() -> Completable {
         if let error = self.error {
             return Completable.error(error)
@@ -54,25 +78,42 @@ final class CompletableResolver: BaseResolver, Resolver {
 
 final class SingleResolver<T>: ValueResolver<T>, Resolver {
     
-    /// Used internally to resolve the result.
     func resolve() -> Single<T> {
-        if let valueClosure = valueClosure {
-            return Single<T>.just(valueClosure())
-        }
-        return Single<T>.error(self.error!)
+        return resolveValue(
+            success: { Single<T>.just($0) },
+            failure: { Single<T>.error($0) },
+            completion: { Single<T>.error(RxyError.errorNotFound) }
+        )
     }
 }
 
 final class MaybeResolver<T>: ValueResolver<T>, Resolver {
     
-    /// Used internally to resolve the result.
     func resolve() -> Maybe<T> {
-        if let valueClosure = valueClosure {
-            return Maybe.just(valueClosure())
-        }
-        if let error = self.error {
-            return Maybe.error(error)
-        }
-        return Maybe.empty()
+        return resolveValue(
+            success: { Maybe<T>.just($0) },
+            failure: { Maybe<T>.error($0) },
+            completion: { Maybe<T>.empty() }
+        )
     }
 }
+
+// MARK: - JSON
+
+extension ValueResolver where T: Decodable {
+    
+    convenience init(json: String) {
+        
+        self.init()
+        self.valueClosure = {
+            
+            let decoder = JSONDecoder.init()
+            if let jsonData = json.data(using: .utf8) {
+                return try decoder.decode(T.self, from: jsonData)
+            }
+            
+            throw RxyError.invalidJSON
+        }
+    }
+}
+

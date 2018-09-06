@@ -20,37 +20,37 @@ import RxSwift
 /// Visually it's little different to using the AsyncMock class directly. However when it's run, mock errors will be reported
 /// On the line where the mock is declared, rather than the line where the mockFunction(...) call was made.
 
-public class BaseMock: AsyncMock {
+open class BaseMock: AsyncMock {
     
     private let file: String
     private let line: UInt
     
-    init(file: String = #file, line: UInt = #line) {
+    public init(file: String = #file, line: UInt = #line) {
         self.file = file
         self.line = line
     }
     
-    func unexpectedFunctionCall(function: String = #function) {
+    public func unexpectedFunctionCall(function: String = #function) {
         unexpectedFunctionCall(file: file, line: line, function: function)
     }
     
-    func mockFunction(function: String = #function, returning result: CompletableResult?) -> Completable {
+    public func mockFunction(function: String = #function, returning result: CompletableResult?) -> Completable {
         return mockFunction(file: file, line: line, function: function, returning: result)
     }
     
-    func mockFunction<T>(function: String = #function, returning result: SingleResult<T>?) -> Single<T> {
+    public func mockFunction<T>(function: String = #function, returning result: SingleResult<T>?) -> Single<T> {
         return mockFunction(file: file, line: line, function: function, returning: result)
     }
     
-    func mockFunction<T>(function: String = #function, returning result: MaybeResult<T>?) -> Maybe<T> {
+    public func mockFunction<T>(function: String = #function, returning result: MaybeResult<T>?) -> Maybe<T> {
         return mockFunction(file: file, line: line, function: function, returning: result)
     }
     
-    func mockFunction<T>(function: String = #function, returning result: SingleResult<Any>?) -> Single<T> {
+    public func mockFunction<T>(function: String = #function, returning result: SingleResult<Any>?) -> Single<T> {
         return mockFunction(file: file, line: line, function: function, returning: result)
     }
     
-    func mockFunction<T>(function: String = #function, returning result: MaybeResult<Any>?) -> Maybe<T> {
+    public func mockFunction<T>(function: String = #function, returning result: MaybeResult<Any>?) -> Maybe<T> {
         return mockFunction(file: file, line: line, function: function, returning: result)
     }
 }

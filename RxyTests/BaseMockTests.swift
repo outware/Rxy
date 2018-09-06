@@ -4,7 +4,7 @@
 import XCTest
 import RxSwift
 import Nimble
-@testable import Rxy
+import Rxy
 
 private protocol DoSomething {
     func doSingleThing() -> Single<Int>

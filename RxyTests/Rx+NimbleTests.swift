@@ -3,7 +3,7 @@
 
 import XCTest
 import Nimble
-@testable import Rxy
+import Rxy
 import RxSwift
 
 class Rx_NimbleTests: XCTestCase {

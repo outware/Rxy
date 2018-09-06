@@ -2,7 +2,7 @@
 //  Copyright © 2018 Derek Clarkson. All rights reserved.
 
 import XCTest
-@testable import Rxy
+import Rxy
 import RxSwift
 import Nimble
 
