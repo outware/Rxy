@@ -20,11 +20,11 @@
 		6C83A55C2137A9B000CE2222 /* Rxy.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C83A54E2137A9B000CE2222 /* Rxy.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C83A5692137B07000CE2222 /* RxBlocking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C83A5672137B07000CE2222 /* RxBlocking.framework */; };
 		6C83A56A2137B07000CE2222 /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C83A5682137B07000CE2222 /* Nimble.framework */; };
-		6C83A56D2137B09900CE2222 /* RxBlocking.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C83A5672137B07000CE2222 /* RxBlocking.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		6C83A56D2137B09900CE2222 /* RxBlocking.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 6C83A5672137B07000CE2222 /* RxBlocking.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6C83A5702137B22200CE2222 /* AsyncMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C83A56F2137B22200CE2222 /* AsyncMock.swift */; };
 		6C83A5732137B7B400CE2222 /* RxBlocking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C83A5672137B07000CE2222 /* RxBlocking.framework */; };
 		6C83A5752137B7B400CE2222 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C83A5742137B7B400CE2222 /* RxSwift.framework */; };
-		6C83A5762137B7C000CE2222 /* RxSwift.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C83A5742137B7B400CE2222 /* RxSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		6C83A5762137B7C000CE2222 /* RxSwift.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 6C83A5742137B7B400CE2222 /* RxSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6C83A5782137BA6D00CE2222 /* MockResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C83A5772137BA6D00CE2222 /* MockResult.swift */; };
 		6C83A57A2137C89A00CE2222 /* MockResolverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C83A5792137C89A00CE2222 /* MockResolverTests.swift */; };
 		6C83A57C2137C94E00CE2222 /* Rx+Nimble.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C83A57B2137C94E00CE2222 /* Rx+Nimble.swift */; };
@@ -32,12 +32,27 @@
 		6CA2CB88213CBBA9003B73AB /* Rx+NimbleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CA2CB87213CBBA9003B73AB /* Rx+NimbleTests.swift */; };
 		6CA2CB8A213CBD85003B73AB /* AssertionValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CA2CB89213CBD85003B73AB /* AssertionValidator.swift */; };
 		6CA2CB8E213CE164003B73AB /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C83A5682137B07000CE2222 /* Nimble.framework */; };
-		6CA2CB8F213CE171003B73AB /* Nimble.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C83A5682137B07000CE2222 /* Nimble.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		6CA2CB8F213CE171003B73AB /* Nimble.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 6C83A5682137B07000CE2222 /* Nimble.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6CA5C1CA2141465E00C04584 /* JSONFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CA5C1C92141465E00C04584 /* JSONFactory.swift */; };
 		6CA5C1CC2141676D00C04584 /* Bundle+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CA5C1CB2141676D00C04584 /* Bundle+Extensions.swift */; };
 		6CEED9092141FCE700331356 /* abc.json in Resources */ = {isa = PBXBuildFile; fileRef = 6CEED9072141FCC300331356 /* abc.json */; };
 		6CEED90B2141FD0600331356 /* Bundle+ExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CEED90A2141FD0600331356 /* Bundle+ExtensionsTests.swift */; };
 		6CEED90D21420BDC00331356 /* invalid.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6CEED90C21420BDC00331356 /* invalid.jpg */; };
+		6CEED915214212FC00331356 /* RxyDemoSimpleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CEED914214212FC00331356 /* RxyDemoSimpleTests.swift */; };
+		6CEED917214212FC00331356 /* Rxy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C83A54B2137A9B000CE2222 /* Rxy.framework */; };
+		6CEED91D21422CD800331356 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C83A5742137B7B400CE2222 /* RxSwift.framework */; };
+		6CEED91E21422CDB00331356 /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C83A5682137B07000CE2222 /* Nimble.framework */; };
+		6CEED91F21422CDE00331356 /* RxBlocking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C83A5672137B07000CE2222 /* RxBlocking.framework */; };
+		6CEED92221422D1B00331356 /* RxSwift.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 6C83A5742137B7B400CE2222 /* RxSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		6CEED92321422D1B00331356 /* Nimble.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 6C83A5682137B07000CE2222 /* Nimble.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		6CEED92421422D1B00331356 /* RxBlocking.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 6C83A5672137B07000CE2222 /* RxBlocking.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		6CEED9282142522200331356 /* ApplicationCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CEED9272142522200331356 /* ApplicationCode.swift */; };
+		6CEED92A2142528900331356 /* MockHTTPClientOldSchool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CEED9292142528900331356 /* MockHTTPClientOldSchool.swift */; };
+		6CEED92C214252B400331356 /* MockHTTPClientRxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CEED92B214252B400331356 /* MockHTTPClientRxy.swift */; };
+		6CEED92E2142533F00331356 /* RxyDemoComplexTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CEED92D2142533F00331356 /* RxyDemoComplexTests.swift */; };
+		6CEED9302142547100331356 /* RxyDemoMockResultOptionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CEED92F2142547000331356 /* RxyDemoMockResultOptionsTests.swift */; };
+		6CEED93221425CED00331356 /* RxyDemoNimbleFailuresTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CEED93121425CED00331356 /* RxyDemoNimbleFailuresTests.swift */; };
+		6CEED9352142604B00331356 /* RemoteCallResult.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CEED9332142603A00331356 /* RemoteCallResult.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,18 +63,49 @@
 			remoteGlobalIDString = 6C83A54A2137A9B000CE2222;
 			remoteInfo = Rxy;
 		};
+		6CEED918214212FC00331356 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6C83A5422137A9B000CE2222 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6C83A54A2137A9B000CE2222;
+			remoteInfo = Rxy;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		6C83A56B2137B08C00CE2222 /* CopyFiles */ = {
+		6C83A56B2137B08C00CE2222 /* Copy frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				6CA2CB8F213CE171003B73AB /* Nimble.framework in CopyFiles */,
-				6C83A5762137B7C000CE2222 /* RxSwift.framework in CopyFiles */,
-				6C83A56D2137B09900CE2222 /* RxBlocking.framework in CopyFiles */,
+				6CA2CB8F213CE171003B73AB /* Nimble.framework in Copy frameworks */,
+				6C83A5762137B7C000CE2222 /* RxSwift.framework in Copy frameworks */,
+				6C83A56D2137B09900CE2222 /* RxBlocking.framework in Copy frameworks */,
+			);
+			name = "Copy frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6CEED92021422CF700331356 /* Copy frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				6CEED92221422D1B00331356 /* RxSwift.framework in Copy frameworks */,
+				6CEED92321422D1B00331356 /* Nimble.framework in Copy frameworks */,
+				6CEED92421422D1B00331356 /* RxBlocking.framework in Copy frameworks */,
+			);
+			name = "Copy frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6CEED9342142604100331356 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 7;
+			files = (
+				6CEED9352142604B00331356 /* RemoteCallResult.json in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -97,6 +143,16 @@
 		6CEED9072141FCC300331356 /* abc.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = abc.json; sourceTree = "<group>"; };
 		6CEED90A2141FD0600331356 /* Bundle+ExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+ExtensionsTests.swift"; sourceTree = "<group>"; };
 		6CEED90C21420BDC00331356 /* invalid.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = invalid.jpg; sourceTree = "<group>"; };
+		6CEED912214212FC00331356 /* RxyDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RxyDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		6CEED914214212FC00331356 /* RxyDemoSimpleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxyDemoSimpleTests.swift; sourceTree = "<group>"; };
+		6CEED916214212FC00331356 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6CEED9272142522200331356 /* ApplicationCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationCode.swift; sourceTree = "<group>"; };
+		6CEED9292142528900331356 /* MockHTTPClientOldSchool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockHTTPClientOldSchool.swift; sourceTree = "<group>"; };
+		6CEED92B214252B400331356 /* MockHTTPClientRxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockHTTPClientRxy.swift; sourceTree = "<group>"; };
+		6CEED92D2142533F00331356 /* RxyDemoComplexTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxyDemoComplexTests.swift; sourceTree = "<group>"; };
+		6CEED92F2142547000331356 /* RxyDemoMockResultOptionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxyDemoMockResultOptionsTests.swift; sourceTree = "<group>"; };
+		6CEED93121425CED00331356 /* RxyDemoNimbleFailuresTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxyDemoNimbleFailuresTests.swift; sourceTree = "<group>"; };
+		6CEED9332142603A00331356 /* RemoteCallResult.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = RemoteCallResult.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,6 +176,17 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		6CEED90F214212FC00331356 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6CEED91E21422CDB00331356 /* Nimble.framework in Frameworks */,
+				6CEED91D21422CD800331356 /* RxSwift.framework in Frameworks */,
+				6CEED917214212FC00331356 /* Rxy.framework in Frameworks */,
+				6CEED91F21422CDE00331356 /* RxBlocking.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -130,6 +197,7 @@
 				6C83A5652137AA4200CE2222 /* Cartfile */,
 				6C83A54D2137A9B000CE2222 /* Rxy */,
 				6C83A5582137A9B000CE2222 /* RxyTests */,
+				6CEED913214212FC00331356 /* RxyDemoTests */,
 				6C83A54C2137A9B000CE2222 /* Products */,
 				6C83A5662137B07000CE2222 /* Frameworks */,
 			);
@@ -140,6 +208,7 @@
 			children = (
 				6C83A54B2137A9B000CE2222 /* Rxy.framework */,
 				6C83A5542137A9B000CE2222 /* RxyTests.xctest */,
+				6CEED912214212FC00331356 /* RxyDemoTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -192,6 +261,38 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		6CEED913214212FC00331356 /* RxyDemoTests */ = {
+			isa = PBXGroup;
+			children = (
+				6CEED926214251E700331356 /* Application code */,
+				6CEED916214212FC00331356 /* Info.plist */,
+				6CEED925214251DD00331356 /* Mocks */,
+				6CEED92D2142533F00331356 /* RxyDemoComplexTests.swift */,
+				6CEED92F2142547000331356 /* RxyDemoMockResultOptionsTests.swift */,
+				6CEED93121425CED00331356 /* RxyDemoNimbleFailuresTests.swift */,
+				6CEED914214212FC00331356 /* RxyDemoSimpleTests.swift */,
+				6CEED9332142603A00331356 /* RemoteCallResult.json */,
+			);
+			path = RxyDemoTests;
+			sourceTree = "<group>";
+		};
+		6CEED925214251DD00331356 /* Mocks */ = {
+			isa = PBXGroup;
+			children = (
+				6CEED9292142528900331356 /* MockHTTPClientOldSchool.swift */,
+				6CEED92B214252B400331356 /* MockHTTPClientRxy.swift */,
+			);
+			path = Mocks;
+			sourceTree = "<group>";
+		};
+		6CEED926214251E700331356 /* Application code */ = {
+			isa = PBXGroup;
+			children = (
+				6CEED9272142522200331356 /* ApplicationCode.swift */,
+			);
+			path = "Application code";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -230,7 +331,7 @@
 			buildPhases = (
 				6C83A5502137A9B000CE2222 /* Sources */,
 				6C83A5512137A9B000CE2222 /* Frameworks */,
-				6C83A56B2137B08C00CE2222 /* CopyFiles */,
+				6C83A56B2137B08C00CE2222 /* Copy frameworks */,
 				6CEED9082141FCE000331356 /* Resources */,
 			);
 			buildRules = (
@@ -241,6 +342,25 @@
 			name = RxyTests;
 			productName = RxyTests;
 			productReference = 6C83A5542137A9B000CE2222 /* RxyTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		6CEED911214212FC00331356 /* RxyDemoTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6CEED91A214212FC00331356 /* Build configuration list for PBXNativeTarget "RxyDemoTests" */;
+			buildPhases = (
+				6CEED90E214212FC00331356 /* Sources */,
+				6CEED90F214212FC00331356 /* Frameworks */,
+				6CEED92021422CF700331356 /* Copy frameworks */,
+				6CEED9342142604100331356 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6CEED919214212FC00331356 /* PBXTargetDependency */,
+			);
+			name = RxyDemoTests;
+			productName = RxyDemoTests;
+			productReference = 6CEED912214212FC00331356 /* RxyDemoTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -260,6 +380,9 @@
 					6C83A5532137A9B000CE2222 = {
 						CreatedOnToolsVersion = 10.0;
 					};
+					6CEED911214212FC00331356 = {
+						CreatedOnToolsVersion = 10.0;
+					};
 				};
 			};
 			buildConfigurationList = 6C83A5452137A9B000CE2222 /* Build configuration list for PBXProject "Rxy" */;
@@ -276,6 +399,7 @@
 			targets = (
 				6C83A54A2137A9B000CE2222 /* Rxy */,
 				6C83A5532137A9B000CE2222 /* RxyTests */,
+				6CEED911214212FC00331356 /* RxyDemoTests */,
 			);
 		};
 /* End PBXProject section */
@@ -346,6 +470,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		6CEED90E214212FC00331356 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6CEED92E2142533F00331356 /* RxyDemoComplexTests.swift in Sources */,
+				6CEED92A2142528900331356 /* MockHTTPClientOldSchool.swift in Sources */,
+				6CEED915214212FC00331356 /* RxyDemoSimpleTests.swift in Sources */,
+				6CEED9302142547100331356 /* RxyDemoMockResultOptionsTests.swift in Sources */,
+				6CEED93221425CED00331356 /* RxyDemoNimbleFailuresTests.swift in Sources */,
+				6CEED92C214252B400331356 /* MockHTTPClientRxy.swift in Sources */,
+				6CEED9282142522200331356 /* ApplicationCode.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -353,6 +491,11 @@
 			isa = PBXTargetDependency;
 			target = 6C83A54A2137A9B000CE2222 /* Rxy */;
 			targetProxy = 6C83A5562137A9B000CE2222 /* PBXContainerItemProxy */;
+		};
+		6CEED919214212FC00331356 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6C83A54A2137A9B000CE2222 /* Rxy */;
+			targetProxy = 6CEED918214212FC00331356 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -573,6 +716,56 @@
 			};
 			name = Release;
 		};
+		6CEED91B214212FC00331356 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = Y2XN2Z2HA2;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
+				INFOPLIST_FILE = RxyDemoTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = au.com.outware.RxyDemoTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		6CEED91C214212FC00331356 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = Y2XN2Z2HA2;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
+				INFOPLIST_FILE = RxyDemoTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = au.com.outware.RxyDemoTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -599,6 +792,15 @@
 			buildConfigurations = (
 				6C83A5632137A9B000CE2222 /* Debug */,
 				6C83A5642137A9B000CE2222 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6CEED91A214212FC00331356 /* Build configuration list for PBXNativeTarget "RxyDemoTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6CEED91B214212FC00331356 /* Debug */,
+				6CEED91C214212FC00331356 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

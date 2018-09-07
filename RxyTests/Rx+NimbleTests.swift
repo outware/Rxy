@@ -15,7 +15,7 @@ class Rx_NimbleTests: XCTestCase {
     }
 
     func testSequenceWaitForErrorGeneratesNimbleErrorOnCompletation() {
-        expectNimble(error: "Expected an error, but got a successful completion instead") {
+        expectNimble(error: "Expected an error, but got a success instead") {
             Single<Int>.just(5).executeInBackground().waitForError()
         }
     }
@@ -29,6 +29,16 @@ class Rx_NimbleTests: XCTestCase {
     func testSingleWaitForSuccessGeneratesNimbleErrorOnFailure() {
         expectNimble(error: "Expected a single value, got error TestError.anError instead") {
            Single<Int>.error(TestError.anError).executeInBackground().waitForSuccess()
+        }
+    }
+
+    func testSingleWaitForError() {
+        expect(Single<Int>.error(TestError.anError).executeInBackground().waitForError()).to(matchError(TestError.anError))
+    }
+    
+    func testSingleWaitForErrorGeneratesNimbleErrorOnCompletation() {
+        expectNimble(error: "Expected an error, but got a success instead") {
+            Single<Int>.just(5).executeInBackground().waitForError()
         }
     }
     
@@ -66,6 +76,22 @@ class Rx_NimbleTests: XCTestCase {
         }
     }
     
+    func testMaybeWaitForError() {
+        expect(Maybe<Int>.error(TestError.anError).executeInBackground().waitForError()).to(matchError(TestError.anError))
+    }
+    
+    func testMaybeWaitForErrorGeneratesNimbleErrorOnValue() {
+        expectNimble(error: "Expected an error, but Maybe completed instead") {
+            Maybe<Int>.just(5).executeInBackground().waitForError()
+        }
+    }
+
+    func testMaybeWaitForErrorGeneratesNimbleErrorOnCompletation() {
+        expectNimble(error: "Expected an error, but got a value instead") {
+            Maybe<Int>.empty().executeInBackground().waitForError()
+        }
+    }
+
     // MARK: - Completable
     
     func testCmpletableWaitForCompletion() {
@@ -77,5 +103,14 @@ class Rx_NimbleTests: XCTestCase {
             Completable.error(TestError.anError).executeInBackground().waitForCompletion()
         }
     }
-
+    
+    func testCompletableWaitForError() {
+        expect(Completable.error(TestError.anError).executeInBackground().waitForError()).to(matchError(TestError.anError))
+    }
+    
+    func testCompletableWaitForErrorGeneratesNimbleErrorOnCompletation() {
+        expectNimble(error: "Expected an error, but completed instead") {
+            Completable.empty().executeInBackground().waitForError()
+        }
+    }
 }
