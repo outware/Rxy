@@ -23,7 +23,7 @@ class RxyDemoSimpleTests: XCTestCase {
         remoteService = RemoteService(client: mockHTTPClientOldSchool)
     }
     
-    func validateSuccess(response: RemoteCallResult?, line: UInt = #line) {
+    func validateSuccess(response: RemoteCallResponse?, line: UInt = #line) {
         expect(self.mockHTTPClientOldSchool.getSingleURL, line: line) == "xyz"
         expect(response?.aValue, line: line) == "abc"
     }
@@ -43,11 +43,11 @@ class RxyDemoSimpleTests: XCTestCase {
     
     func testSimpleRxSwiftFunctionUsingSubscribe() {
         
-        mockHTTPClientOldSchool.getSingleURLResult = RemoteCallResult(aValue: "abc")
+        mockHTTPClientOldSchool.getSingleURLResult = RemoteCallResponse(aValue: "abc")
         
         let disposeBag = DisposeBag()
         var callDone: Bool = false
-        var response: RemoteCallResult?
+        var response: RemoteCallResponse?
         remoteService.makeSingleRemoteCall(toUrl: "xyz")
             .subscribe(
                 onSuccess: { result in
@@ -65,10 +65,10 @@ class RxyDemoSimpleTests: XCTestCase {
     
     func testSimpleRxSwiftFunctionUsingRxBlocking() {
         
-        mockHTTPClientOldSchool.getSingleURLResult = RemoteCallResult(aValue: "abc")
+        mockHTTPClientOldSchool.getSingleURLResult = RemoteCallResponse(aValue: "abc")
         
         do {
-            let response: RemoteCallResult? = try remoteService.makeSingleRemoteCall(toUrl: "xyz").toBlocking().first()
+            let response: RemoteCallResponse? = try remoteService.makeSingleRemoteCall(toUrl: "xyz").toBlocking().first()
             validateSuccess(response: response)
         }
         catch let error {
@@ -77,8 +77,8 @@ class RxyDemoSimpleTests: XCTestCase {
     }
     
     func testSimpleRxSwiftFunctionUsingRxy() {
-        mockHTTPClientOldSchool.getSingleURLResult = RemoteCallResult(aValue: "abc")
-        let response: RemoteCallResult? = remoteService.makeSingleRemoteCall(toUrl: "xyz").waitForSuccess()
+        mockHTTPClientOldSchool.getSingleURLResult = RemoteCallResponse(aValue: "abc")
+        let response: RemoteCallResponse? = remoteService.makeSingleRemoteCall(toUrl: "xyz").waitForSuccess()
         validateSuccess(response: response)
     }
 }

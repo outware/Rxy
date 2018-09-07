@@ -10,18 +10,21 @@ class MockHTTPClientRxy: BaseMock, HTTPClient {
     var postCompletableURL: String?
     var postCompletableURLResult: CompletableResult?
     func postCompletable(url: String) -> Completable {
+        postCompletableURL = url
         return mockFunction(returning: postCompletableURLResult)
     }
     
     var getSingleURL: String?
-    var getSingleURLResult: SingleResult<RemoteCallResult>?
-    func getSingle(url: String) -> Single<RemoteCallResult> {
+    var getSingleURLResult: SingleResult<RemoteCallResponse>?
+    func getSingle(url: String) -> Single<RemoteCallResponse> {
+        getSingleURL = url
         return mockFunction(returning: getSingleURLResult)
     }
     
     var doMaybeURL: String?
-    var doMaybeURLResult: MaybeResult<RemoteCallResult>?
-    func doMaybe(url: String) -> Maybe<RemoteCallResult> {
+    var doMaybeURLResult: MaybeResult<RemoteCallResponse>?
+    func doMaybe(url: String) -> Maybe<RemoteCallResponse> {
+        doMaybeURL = url
         return mockFunction(returning: doMaybeURLResult)
     }
 }

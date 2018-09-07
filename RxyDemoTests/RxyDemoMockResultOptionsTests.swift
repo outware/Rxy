@@ -33,12 +33,12 @@ class RxyDemoMockResultOptionsTests: XCTestCase {
     // MARK: - Singles
     
     func testSingleValue() {
-        mockHTTPClientRxy.getSingleURLResult = .value(RemoteCallResult(aValue: "abc"))
+        mockHTTPClientRxy.getSingleURLResult = .value(RemoteCallResponse(aValue: "abc"))
         expect(self.remoteService.makeSingleRemoteCall(toUrl: "xyz").waitForSuccess()?.aValue) == "abc"
     }
     
     func testSingleClosure() {
-        mockHTTPClientRxy.getSingleURLResult = .value { return RemoteCallResult(aValue: "abc") }
+        mockHTTPClientRxy.getSingleURLResult = .value { return RemoteCallResponse(aValue: "abc") }
         expect(self.remoteService.makeSingleRemoteCall(toUrl: "xyz").waitForSuccess()?.aValue) == "abc"
     }
     
@@ -66,12 +66,12 @@ class RxyDemoMockResultOptionsTests: XCTestCase {
     // MARK: - Maybes
     
     func testMaybeValue() {
-        mockHTTPClientRxy.doMaybeURLResult = .value(RemoteCallResult(aValue: "abc"))
+        mockHTTPClientRxy.doMaybeURLResult = .value(RemoteCallResponse(aValue: "abc"))
         expect(self.remoteService.makeMaybeRemoteCall(toUrl: "xyz").waitForValue()?.aValue) == "abc"
     }
 
     func testMaybeClosure() {
-        mockHTTPClientRxy.doMaybeURLResult = .value { return RemoteCallResult(aValue: "abc") }
+        mockHTTPClientRxy.doMaybeURLResult = .value { return RemoteCallResponse(aValue: "abc") }
         expect(self.remoteService.makeMaybeRemoteCall(toUrl: "xyz").waitForValue()?.aValue) == "abc"
     }
 

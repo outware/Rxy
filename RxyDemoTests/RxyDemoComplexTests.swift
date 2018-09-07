@@ -20,7 +20,7 @@ class RxyDemoComplexTests: XCTestCase {
         remoteService = RemoteService(client: mockHTTPClientOldSchool)
     }
    
-    func validateSuccess(response: RemoteCallResult?, line: UInt = #line) {
+    func validateSuccess(response: RemoteCallResponse?, line: UInt = #line) {
         expect(self.mockHTTPClientOldSchool.getSingleURL, line: line) == "xyz"
         expect(response?.aValue, line: line) == "abc"
     }
@@ -34,16 +34,16 @@ class RxyDemoComplexTests: XCTestCase {
         let disposeBag = DisposeBag()
         var callDone: Bool = false
         
-        mockHTTPClientOldSchool.getSingleURLResult = RemoteCallResult(aValue: "abc")
+        mockHTTPClientOldSchool.getSingleURLResult = RemoteCallResponse(aValue: "abc")
         remoteService.makeSingleRemoteCall(toUrl: "xyz")
-            .asObservable().concatMap { response -> Single<RemoteCallResult> in
+            .asObservable().concatMap { response -> Single<RemoteCallResponse> in
                 expect(response.aValue) == "abc"
-                self.mockHTTPClientOldSchool.getSingleURLResult = RemoteCallResult(aValue: "def")
+                self.mockHTTPClientOldSchool.getSingleURLResult = RemoteCallResponse(aValue: "def")
                 return self.remoteService.makeSingleRemoteCall(toUrl: "xyz")
             }
-            .asObservable().concatMap { response -> Single<RemoteCallResult> in
+            .asObservable().concatMap { response -> Single<RemoteCallResponse> in
                 expect(response.aValue) == "def"
-                self.mockHTTPClientOldSchool.getSingleURLResult = RemoteCallResult(aValue: "ghi")
+                self.mockHTTPClientOldSchool.getSingleURLResult = RemoteCallResponse(aValue: "ghi")
                 return self.remoteService.makeSingleRemoteCall(toUrl: "xyz")
             }.asSingle()
             .subscribe(
@@ -63,13 +63,13 @@ class RxyDemoComplexTests: XCTestCase {
     
     func testComplexRxSwiftCallsUsingRxy() {
         
-        mockHTTPClientOldSchool.getSingleURLResult = RemoteCallResult(aValue: "abc")
+        mockHTTPClientOldSchool.getSingleURLResult = RemoteCallResponse(aValue: "abc")
         expect(self.remoteService.makeSingleRemoteCall(toUrl: "xyz").waitForSuccess()?.aValue) == "abc"
         
-        mockHTTPClientOldSchool.getSingleURLResult = RemoteCallResult(aValue: "def")
+        mockHTTPClientOldSchool.getSingleURLResult = RemoteCallResponse(aValue: "def")
         expect(self.remoteService.makeSingleRemoteCall(toUrl: "xyz").waitForSuccess()?.aValue) == "def"
         
-        mockHTTPClientOldSchool.getSingleURLResult = RemoteCallResult(aValue: "ghi")
+        mockHTTPClientOldSchool.getSingleURLResult = RemoteCallResponse(aValue: "ghi")
         expect(self.remoteService.makeSingleRemoteCall(toUrl: "xyz").waitForSuccess()?.aValue) == "ghi"
     }
     

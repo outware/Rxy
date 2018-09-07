@@ -218,15 +218,15 @@
 			children = (
 				6C83A56F2137B22200CE2222 /* AsyncMock.swift */,
 				6C1908FA213E3A77003121A2 /* BaseMock.swift */,
+				6CA5C1CB2141676D00C04584 /* Bundle+Extensions.swift */,
 				6C83A54F2137A9B000CE2222 /* Info.plist */,
+				6CA5C1C92141465E00C04584 /* JSONFactory.swift */,
 				6C3BBB2D2140C7FC00EB05DD /* MockResolver.swift */,
 				6C83A5772137BA6D00CE2222 /* MockResult.swift */,
 				6C83A57B2137C94E00CE2222 /* Rx+Nimble.swift */,
 				6C1908F8213E2A08003121A2 /* Rx+Threading.swift */,
 				6C83A54E2137A9B000CE2222 /* Rxy.h */,
 				6C83A57D2137CC1300CE2222 /* RxyError.swift */,
-				6CA5C1C92141465E00C04584 /* JSONFactory.swift */,
-				6CA5C1CB2141676D00C04584 /* Bundle+Extensions.swift */,
 			);
 			path = Rxy;
 			sourceTree = "<group>";

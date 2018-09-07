@@ -38,7 +38,7 @@ class RxyDemoNimbleFailuresTests: XCTestCase {
     }
     
     func testSingleWaitForError_failure() {
-        mockHTTPClientRxy.getSingleURLResult = .value(RemoteCallResult(aValue: "abc"))
+        mockHTTPClientRxy.getSingleURLResult = .value(RemoteCallResponse(aValue: "abc"))
         expect(self.remoteService.makeSingleRemoteCall(toUrl: "xyz").waitForError()).to(matchError(TestError.anError))
     }
     
@@ -55,7 +55,7 @@ class RxyDemoNimbleFailuresTests: XCTestCase {
     }
     
     func testMaybeWaitForError_failureWithValue() {
-        mockHTTPClientRxy.doMaybeURLResult = .value(RemoteCallResult(aValue: "abc"))
+        mockHTTPClientRxy.doMaybeURLResult = .value(RemoteCallResponse(aValue: "abc"))
         expect(self.remoteService.makeMaybeRemoteCall(toUrl: "xyz").waitForError()).to(matchError(TestError.anError))
     }
     

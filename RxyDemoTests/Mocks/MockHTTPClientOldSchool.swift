@@ -21,9 +21,9 @@ class MockHTTPClientOldSchool: HTTPClient {
     }
     
     var getSingleURL: String?
-    var getSingleURLResult: RemoteCallResult?
+    var getSingleURLResult: RemoteCallResponse?
     var getSingleURLError: Error?
-    func getSingle(url: String) -> Single<RemoteCallResult> {
+    func getSingle(url: String) -> Single<RemoteCallResponse> {
         getSingleURL = url
         if let result = getSingleURLResult {
             return Single.just(result)
@@ -36,9 +36,9 @@ class MockHTTPClientOldSchool: HTTPClient {
     
     var doMaybeURL: String?
     var doMaybeURLComplete: Bool?
-    var doMaybeURLResult: RemoteCallResult?
+    var doMaybeURLResult: RemoteCallResponse?
     var doMaybeURLError: Error?
-    func doMaybe(url: String) -> Maybe<RemoteCallResult> {
+    func doMaybe(url: String) -> Maybe<RemoteCallResponse> {
         doMaybeURL = url
         if let result = doMaybeURLResult {
             return Maybe.just(result)

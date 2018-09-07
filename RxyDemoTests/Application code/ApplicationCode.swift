@@ -10,12 +10,12 @@ enum TestError: Error {
 // Simple protocol which defines a service we might want to mock out during testing.
 protocol HTTPClient {
     func postCompletable(url: String) -> Completable
-    func getSingle(url: String) -> Single<RemoteCallResult>
-    func doMaybe(url: String) -> Maybe<RemoteCallResult>
+    func getSingle(url: String) -> Single<RemoteCallResponse>
+    func doMaybe(url: String) -> Maybe<RemoteCallResponse>
 }
 
 // Simple object we might return from a call.
-struct RemoteCallResult: Decodable {
+struct RemoteCallResponse: Decodable {
     var aValue: String?
 }
 
@@ -28,7 +28,7 @@ class RemoteService {
         self.client = client
     }
     
-    func makeSingleRemoteCall(toUrl url: String) -> Single<RemoteCallResult> {
+    func makeSingleRemoteCall(toUrl url: String) -> Single<RemoteCallResponse> {
         return client.getSingle(url: url)
     }
     
@@ -36,7 +36,7 @@ class RemoteService {
         return client.postCompletable(url: url)
     }
     
-    func makeMaybeRemoteCall(toUrl url: String) -> Maybe<RemoteCallResult> {
+    func makeMaybeRemoteCall(toUrl url: String) -> Maybe<RemoteCallResponse> {
         return client.doMaybe(url: url)
     }
     
