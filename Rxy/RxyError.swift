@@ -10,13 +10,17 @@ public enum RxyError: Error {
     /// Thrown when a function is called for which the result is nil.
     case unexpectedFunctionCall(String)
     
-    case invalidJSON
-
     /// Error decoding JSON into an object.
-    case decodingError(expected: Any, fromJSON: String, error: Error)
+    case decodingError(expected: Any, fromJSON: String?, error: Error)
 
     /// Should never be thrown.
-    case errorNotFound
+    case fileNotFound
+    
+    /// Thrown if a json file contains non-textural data.
+    case invalidData
+    
+    /// Should never been thrown.
+    case noError
 }
 
 /// Extensions to errors.

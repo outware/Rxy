@@ -32,8 +32,9 @@ class ValueResolver<T>: BaseResolver {
     }
     
     /// Shared core logic for processing values.
-    func resolveValue<O>(success: (T) -> O, failure: (Error) -> O, completion: () -> O) -> O {
+    func resolveValue<O>(success: (T) -> O, failure: (Error) -> O) -> O? {
         
+        // If there is a value closure then return it or fail with any error thrown by it.
         if let valueClosure = valueClosure {
             do {
                 return success(try valueClosure())
@@ -42,14 +43,15 @@ class ValueResolver<T>: BaseResolver {
                 return failure(error)
             }
         }
-        
+
+        // If there is an error then return it.
         if let error = self.error {
             return failure(error)
         }
-        
-        return completion()
+
+        // Otherwise return a nil.
+        return nil
     }
-    
 }
 
 /// Resolvers can resolve a result of a mocked call.
@@ -79,21 +81,19 @@ final class CompletableResolver: BaseResolver, Resolver {
 final class SingleResolver<T>: ValueResolver<T>, Resolver {
     
     func resolve() -> Single<T> {
-        return resolveValue(
-            success: { Single<T>.just($0) },
-            failure: { Single<T>.error($0) },
-            completion: { Single<T>.error(RxyError.errorNotFound) }
-        )
+        guard let result = resolveValue(success: { Single<T>.just($0) }, failure: { Single<T>.error($0) }) else {
+            fatalError("Singles must return a value or an error")
+        }
+        return result
     }
 }
 
 final class MaybeResolver<T>: ValueResolver<T>, Resolver {
     
     func resolve() -> Maybe<T> {
-        return resolveValue(
-            success: { Maybe<T>.just($0) },
-            failure: { Maybe<T>.error($0) },
-            completion: { Maybe<T>.empty() }
-        )
+        if let result = resolveValue(success: { Maybe<T>.just($0) }, failure: { Maybe<T>.error($0) }) {
+            return result
+        }
+        return Maybe<T>.empty()
     }
 }

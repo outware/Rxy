@@ -123,6 +123,10 @@ public final class MaybeResult<T>: ErrorFactory, ValueFactory, CompletionFactory
         self.resolve = MaybeResolver<T>().resolve
     }
     
+    init(resolver: MaybeResolver<T>) {
+        self.resolve = resolver.resolve
+    }
+    
     public init(error: Error) {
         self.resolve = MaybeResolver<T>(error: error).resolve
     }
