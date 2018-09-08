@@ -93,7 +93,7 @@ public protocol AsyncMock {
     /// - Returns: A Maybe that executes on a background thread.
     func mockFunction<T>(file: String, line: UInt, function: String, returning result: MaybeResult<T>?) -> Maybe<T>
     
-    // MARK: - Dynamic variations
+    // MARK: Dynamic variations
     
     /// Use when you need to mock a call to a function that returns a Single with an unkknown value type.
     ///
@@ -145,6 +145,8 @@ public protocol AsyncMock {
 
 }
 
+// MARK: - Implementation
+
 public extension AsyncMock {
     
     public func unexpectedFunctionCall(file: String = #file, line: UInt = #line, function: String = #function) {
@@ -177,7 +179,7 @@ public extension AsyncMock {
             .executeInBackground() ?? .error(reportUnexpectedCall(file: file, line: line, function: function))
     }
     
-    // MARK: - Internal functions
+    // MARK: Internal functions
     
     /// Handles the casting of an unknown type to the desires result type.
     private func cast<T>(file: String, line: UInt, value: Any) throws -> T {
