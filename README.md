@@ -24,7 +24,7 @@ If you open up the Rxy project in Xcode you'll see a target called __RxyDemoTest
 
 Often we need to mock out protocols that return Rx objects. So lets deep dive straight into this by looking at a mock for a typical backend service, then refactoring it to use Rxy. Here's the original mock class. It provides 3 functions from the `HTTPClient` protocol: `postCompletable(…)`, `getSingle(…)` and `doMaybe(…)`:
 
-```
+```swift
 class MockHTTPClientOldSchool: HTTPClient {
     
     var postCompletableURL: String?
@@ -85,7 +85,7 @@ Although not that important for most unit tests, this last point about synchrono
 
 For 3 functions, the mock has quite a bit of code. Now lets take a look at building this same mock with Rxy:
 
-```
+```swift
 class MockHTTPClientRxy: BaseMock, HTTPClient {
     
     var postCompletableURL: String?
@@ -124,7 +124,7 @@ Thats it. Thats all you need to do to your mocks.
 
 Partial mocking is where we extend an established class and mock some of the functions on it. With partial mocks we cannot extend `BaseMock`, so we make use of the `AsyncMock` protocol to gain access to the same functionality `BaseMock` provides. Here's an example using a `NetworkHTTPClient` class instead of the `HTTPClient` protocol.
 
-```
+```swift
 class HTTPMock: NetworkHTTPClient, AsyncMock {
 
     var getSingleURL: String?
@@ -146,7 +146,7 @@ Now that we have the mocks in order, let's look at how we can slim down the test
 
 When testing RxSwift code developers often start by using __`subscribe(…)`__ to execute their Rx code. Excluding the test framework code (XCTest or Quick), here's a typical example:
 
-```
+```swift
 let mockHTTPClient = MockHTTPClient()
 let remoteService = RemoteService(client: mockHTTPClient)
 
@@ -176,7 +176,7 @@ This is also based on the none-Rxy mock `MockHTTPClient` and as you can see ther
 
 Digging in RxSwift a bit you'll find the __RxBlocking__ framework which can be used in tests to execute an asynchronous Rx call in a synchronous fashion. This can help tremendously like this:
 
-```
+```swift
 let mockHTTPClient = MockHTTPClient()
 let remoteService = RemoteService(client: mockHTTPClient)
 
@@ -194,7 +194,7 @@ catch let error {
 
 That's certainly better, but now we're having to catch to report on errors. This is where Rxy comes in. It combines RxBlocking with additional error checking and Rxy's mocking to simply the test down to the minimum required: 
 
-```
+```swift
 let mockHTTPClient = MockHTTPClient()
 let remoteService = RemoteService(client: mockHTTPClient)
 
@@ -278,7 +278,7 @@ Now lets take a look at the options and waits based on the available Rx types. N
 
 Add this to your **Cartfile.private** file:
 
-```
+```swiftq
 github "outware/Rxy"
 ```
 
