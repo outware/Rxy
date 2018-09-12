@@ -1,10 +1,5 @@
-//
-//  Bundle+ExtensionsTests.swift
-//  RxyTests
-//
-//  Created by Derek Clarkson on 7/9/18.
+
 //  Copyright © 2018 Derek Clarkson. All rights reserved.
-//
 
 import XCTest
 @testable import Rxy

@@ -3,6 +3,12 @@
 
 import RxSwift
 
+/// Resolvers can resolve a result of a mocked call.
+protocol Resolver {
+    associatedtype Sequence
+    func resolve() -> Sequence
+}
+
 /**
  Resolvers provide the implementations for produce results for mocked calls.
  */
@@ -10,9 +16,11 @@ import RxSwift
 /// Base resolver for all resolves. Can produce an error result or a void result.
 class BaseResolver {
     
-    fileprivate var error: Error?
+    let error: Error?
     
-    init() {}
+    init() {
+        error = nil
+    }
     
     init(error: Error) {
         self.error = error
@@ -54,46 +62,35 @@ class ValueResolver<T>: BaseResolver {
     }
 }
 
-/// Resolvers can resolve a result of a mocked call.
-protocol Resolver {
-    associatedtype Sequence
-    func resolve() -> Sequence
-}
+extension ValueResolver where T: Decodable {
 
-/// Resolvables can be asked to resolve a result.
-protocol Resolvable {
-    associatedtype Sequence
-    var resolve: () -> Sequence { get set }
-}
-
-// MARK: - Instances
-
-final class CompletableResolver: BaseResolver, Resolver {
-    
-    func resolve() -> Completable {
-        if let error = self.error {
-            return Completable.error(error)
+    convenience init(json: String) {
+        self.init()
+        self.valueClosure = {
+            guard let data = json.data(using: .utf8) else {
+                throw RxyError.invalidData
+            }
+            return try self.loadJSON(data, source: json)
         }
-        return Completable.empty()
     }
-}
 
-final class SingleResolver<T>: ValueResolver<T>, Resolver {
-    
-    func resolve() -> Single<T> {
-        guard let result = resolveValue(success: { Single<T>.just($0) }, failure: { Single<T>.error($0) }) else {
-            fatalError("Singles must return a value or an error")
+    convenience init(jsonFileName filename: String, extension ext: String?, inBundleWithClass aClass: AnyClass) {
+        self.init()
+        self.valueClosure = {
+            guard let jsonData = try Bundle.contentsOfFile(filename, extension: ext, fromBundleWithClass: aClass) else {
+                throw RxyError.fileNotFound
+            }
+            return try self.loadJSON(jsonData)
         }
-        return result
     }
-}
 
-final class MaybeResolver<T>: ValueResolver<T>, Resolver {
-    
-    func resolve() -> Maybe<T> {
-        if let result = resolveValue(success: { Maybe<T>.just($0) }, failure: { Maybe<T>.error($0) }) {
-            return result
+    private func loadJSON(_ data: Data, source json: String? = nil) throws -> T {
+        do {
+            let decoder = JSONDecoder.init()
+            return try decoder.decode(T.self, from: data)
         }
-        return Maybe<T>.empty()
+        catch let error {
+            throw RxyError.decodingError(expected: T.self, fromJSON: json, error: error)
+        }
     }
 }
