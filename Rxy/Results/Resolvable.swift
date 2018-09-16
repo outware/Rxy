@@ -3,8 +3,9 @@
 
 import RxSwift
 
-/// Resolvables can be asked to resolve a result.
+/// Resolvables can be asked to produce a result.
 protocol Resolvable {
     associatedtype Sequence
-    var resolve: () -> Sequence { get set }
+    var resolved: Sequence { get }
 }
+

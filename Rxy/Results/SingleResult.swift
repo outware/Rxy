@@ -3,31 +3,51 @@
 import RxSwift
 
 /// Result type for mocks which return a Single. SingleResults can return values or errors.
-public final class SingleResult<T>: ErrorFactory, ValueFactory, Resolvable {
+public final class SingleResult<T>: Result<SingleEvent<T>>, Resolvable {
 
-    var resolve: () -> Single<T>
-
-    init(resolver: SingleResolver<T>) {
-        self.resolve = resolver.resolve
+    public static func `value`(_ value: @autoclosure @escaping () -> T) -> Self {
+        return self.init { single in
+            single(.success(value()))
+        }
     }
 
-    public init(error: Error) {
-        self.resolve = SingleResolver<T>(error: error).resolve
+    public static func `value`(_ value: @escaping () -> T) -> Self {
+        return self.init { single in
+            single(.success(value()))
+        }
     }
 
-    public init(value: @escaping () -> T) {
-        self.resolve = SingleResolver<T>(value: value).resolve
+    public static func `throw`(_ error: Error) -> Self {
+        return self.init { single in
+            single(.error(error))
+        }
+    }
+
+    var resolved: Single<T> {
+        return Single<T>.create { single in
+            return self.resolve(single)
+        }
     }
 }
 
-extension SingleResult: JSONFactory where T: Decodable {
+public extension SingleResult where T:Decodable {
 
-    public convenience init(json: String) {
-        self.init(resolver: SingleResolver<T>(json: json))
+    public static func json(_ json: String) -> Self {
+        return loadJSON(
+            successClosure: { $0(.success($1)) },
+            errorClosure: { $0(.error($1)) },
+            getDataClosure: { json.data(using: .utf8) },
+            noDataError: RxyError.invalidData,
+            sourceJSON: json
+        )
     }
 
-    public convenience init(jsonFromFile fromFile: String, extension ext: String?, inBundleWithClass aClass: AnyClass) {
-        self.init(resolver: SingleResolver<T>(jsonFileName: fromFile, extension: ext, inBundleWithClass: aClass))
+    public static func json(fromFile: String, extension ext: String? = "json", inBundleWithClass aClass: AnyClass) -> Self {
+        return loadJSON(
+            successClosure: { $0(.success($1)) },
+            errorClosure: { $0(.error($1)) },
+            getDataClosure: { Bundle.contentsOfFile(fromFile, extension: ext, fromBundleWithClass: aClass) },
+            noDataError: RxyError.fileNotFound
+        )
     }
 }
-

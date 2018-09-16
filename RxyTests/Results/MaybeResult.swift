@@ -8,29 +8,29 @@ import Nimble
 class MaybeResultTests: XCTestCase {
 
     func testCompletableResultResolvesSuccess() {
-        CompletableResult.completed().resolve().waitForCompletion()
+        CompletableResult.completed().resolved.waitForCompletion()
     }
 
     // MARK: - MaybeResult
 
     func testResolvesError() {
-        expect(MaybeResult<Int>.throw(TestError.anError).resolve().waitForError()).to(matchError(TestError.anError))
+        expect(MaybeResult<Int>.throw(TestError.anError).resolved.waitForError()).to(matchError(TestError.anError))
     }
 
     func testResolvesValue() {
-        expect(MaybeResult<Int>.value(5).resolve().waitForValue()) == 5
+        expect(MaybeResult<Int>.value(5).resolved.waitForValue()) == 5
     }
 
     func testWithOptionalReturnsNilValue() {
-        expect(MaybeResult<Int?>.value(nil).resolve().waitForValue()!).to(beNil())
+        expect(MaybeResult<Int?>.value(nil).resolved.waitForValue()!).to(beNil())
     }
 
     func testResolvesClosure() {
-        expect(MaybeResult<Int>.value { return 5 }.resolve().waitForValue()) == 5
+        expect(MaybeResult<Int>.value({ return 5 }).resolved.waitForValue()) == 5
     }
 
     func testResolvesSuccess() {
-        MaybeResult<Int>.completed().resolve().waitForCompletion()
+        MaybeResult<Int>.completed().resolved.waitForCompletion()
     }
 
 }
