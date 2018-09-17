@@ -22,7 +22,7 @@ If you open up the Rxy project in Xcode you'll see a target called __RxyDemoTest
 
 ## Mocking protocols
 
-Often we need to mock out protocols that return Rx objects. So lets deep dive straight into this by looking at a mock for a typical backend service, then refactoring it to use Rxy. Here's the original mock class. It provides 3 functions from the `HTTPClient` protocol: `postCompletable(…)`, `getSingle(…)` and `doMaybe(…)`:
+Often we need to mock out protocols that return Rx objects. So lets deep dive straight into this by looking at a mock for a typical backend service, then refactoring it to use Rxy. Here's the original mock class. It provides 3 functions from the `HTTPClient` protocol: `postCompletable(…)`, `getSingle(…)`, `doMaybe(…)` and `doObservable()`:
 
 ```swift
 class MockHTTPClientOldSchool: HTTPClient {
@@ -72,6 +72,24 @@ class MockHTTPClientOldSchool: HTTPClient {
         }
         fatalError("Unexpected method call")
     }
+
+    var doObservableResults: [Int]?
+    var doObservableError: Error?
+    func doObservable() -> Observable<Int> {
+        guard doObservableResults != nil || doObservableError != nil else {
+            fatalError("Unexpected method call")
+        }
+        return Observable<Int>.create { observable in
+            if let results = self.doObservableResults {
+                results.forEach { observable.on(.next($0)) }
+                observable.on(.completed)
+            }
+            if let error = self.doObservableError {
+                observable.on(.error(error))
+            }
+            return Disposables.create()
+        }
+    }
 }
 ``` 
 
@@ -107,6 +125,11 @@ class MockHTTPClientRxy: BaseMock, HTTPClient {
     func doMaybe(url: String) -> Maybe<RemoteCallResponse> {
         doMaybeURL = url
         return mockFunction(returning: doMaybeURLResult)
+    }
+
+    var doObservableResults: ObservableResult<Int>?
+    func doObservable() -> Observable<Int> {
+        return mockFunction(returning: doObservableResults)
     }
 }
 ``` 
@@ -212,9 +235,85 @@ Rxy utilises 2 tricks in this code:
 1. Setting a mock response via the `.value(…)` function.
 2. Waiting for the Single to finish executing using the `waitForSuccess()` function. This also unwraps and returns the value from the single, and produces a test failure if it produces an error.
 
-So writing tests with Rxy is really just doing 3 things: writing the mocks, setting values to return and waiting for the responses. 
+So writing tests with Rxy is really just doing 3 things: writing the mocks, setting values to return and waiting for the responses. Rxy really kicks in when your dealing with more complex examples of test code. For example here's a test that's going to take anyone a bit go study to figure out (And yes, this is based on a real example I found in some unit tests):
 
-Now lets take a look at the options and waits based on the available Rx types. Note: if there is demand, I'll add general Observable support but at the moment Rxy just supports the `Completable`, `Single<>` and `Maybe<>` types. 
+```swift
+func testComplexRxSwiftCallsUsingSubscribe() {
+        
+    let disposeBag = DisposeBag()
+    var callDone: Bool = false
+    
+    mockHTTPClientOldSchool.getSingleURLResult = RemoteCallResponse(aValue: "abc")
+    remoteService.makeSingleRemoteCall(toUrl: "xyz")
+        .asObservable().concatMap { response -> Single<RemoteCallResponse> in
+            expect(response.aValue) == "abc"
+            self.mockHTTPClientOldSchool.getSingleURLResult = RemoteCallResponse(aValue: "def")
+            return self.remoteService.makeSingleRemoteCall(toUrl: "xyz")
+        }
+        .asObservable().concatMap { response -> Single<RemoteCallResponse> in
+            expect(response.aValue) == "def"
+            self.mockHTTPClientOldSchool.getSingleURLResult = RemoteCallResponse(aValue: "ghi")
+            return self.remoteService.makeSingleRemoteCall(toUrl: "xyz")
+        }.asSingle()
+        .subscribe(
+            onSuccess: { response in
+                expect(response.aValue) == "ghi"
+                callDone = true
+        },
+            onError: { error in
+                fail("Unexpected error \(error)")
+                callDone = true
+        }).disposed(by: disposeBag)
+      
+    expect(callDone).toEventually(beTrue())
+}
+```
+
+Ok, after a refactor, here's Rxy's version of the same test:
+
+```swift
+func testComplexRxSwiftCallsUsingRxy() {
+        
+    mockHTTPClientOldSchool.getSingleURLResult = RemoteCallResponse(aValue: "abc")
+    expect(self.remoteService.makeSingleRemoteCall(toUrl: "xyz").waitForSuccess()?.aValue) == "abc"
+        
+    mockHTTPClientOldSchool.getSingleURLResult = RemoteCallResponse(aValue: "def")
+    expect(self.remoteService.makeSingleRemoteCall(toUrl: "xyz").waitForSuccess()?.aValue) == "def"
+        
+    mockHTTPClientOldSchool.getSingleURLResult = RemoteCallResponse(aValue: "ghi")
+    expect(self.remoteService.makeSingleRemoteCall(toUrl: "xyz").waitForSuccess()?.aValue) == "ghi"
+}
+
+```
+
+Ta - Da!
+
+# Reference
+
+Lets take a look at the options and waits based on the available Rx types. Note: Rxy supports the `Observable`, `Completable`, `Single<>` and `Maybe<>` types. 
+
+### Observables
+
+#### Mock value options
+
+`.generate generate(using: @escaping (AnyObserver<T>) -> Void)` - Returns an observable which uses the passed closure to generate its results. The closure is passed a reference to an observer so you can return results by using code like this:
+
+```swift
+    .generate { observable in
+        observable.on(.next(5))
+        observable.on(.completed)
+    }
+```
+
+`.sequence(_ values: [Error]T])` - Returns an observable the values in the passed array individually returned from the observable.
+
+`.throw(_ error: Error)` - Returns an observable with the error.
+
+#### Waits
+
+`.waitForCompletion() -> [T]` - Waits until the observable completes. Generates a test failure on this line if the completable produces an error. Returns the values returned by the Observable.
+
+`.waitForError() -> (error: Error, values: [T])` - Waits until the completable produces an error. Generates a test failure on this line if the completable completes instead. Returns a tuple containing both the error and any returned values.
 
 ### Completables
 
@@ -224,11 +323,11 @@ Now lets take a look at the options and waits based on the available Rx types. N
 
 `.throw(_ error: Error)` - Returns a completable with the error.
 
-##### Waits
+#### Waits
 
 `.waitForCompletion()` - Waits until the completable completes. Generates a test failure on this line if the completable produces an error. 
 
-`.waitForError() -> Error` - Waits until the completable produces an error. Generates a test failure on this line if the completable completes instead.
+`.waitForError() -> Error?` - Waits until the completable produces an error. Generates a test failure on this line if the completable completes instead.
 
 ### Singles
 
@@ -244,11 +343,11 @@ Now lets take a look at the options and waits based on the available Rx types. N
 
 `.throw(_ error: Error)` - Returns a single with the error.
 
-##### Waits
+#### Waits
 
-`.waitForSuccess()` - Waits until the single completes. Generates a test failure on this line if the single produces an error or if another error occurs such as a JSON value being incorrect.
+`.waitForSuccess() -> T?` - Waits until the single completes. Generates a test failure on this line if the single produces an error or if another error occurs such as a JSON value being incorrect. Returns the value produced by the Single.
 
-`.waitForError() -> Error` - Waits until the single produces an error. Generates a test failure on this line if the single completes instead.
+`.waitForError() -> Error?` - Waits until the single produces an error. Generates a test failure on this line if the single completes instead.
 
 ### Maybes
 
@@ -266,13 +365,13 @@ Now lets take a look at the options and waits based on the available Rx types. N
 
 `.throw(_ error: Error)` - Returns a maybe with the error.
 
-##### Waits
+#### Waits
 
 `.waitForCompletion()` - Waits until the maybe completes. Generates a test failure on this line if the maybe produces an error or if it produces a value instead of completing.
 
-`.waitForWait()` - Waits until the maybe produces a value. Generates a test failure on this line if the maybe produces an error or if it completes instead.
+`.waitForValue() -> T?` - Waits until the maybe produces a value. Generates a test failure on this line if the maybe produces an error or if it completes instead.
 
-`.waitForError() -> Error` - Waits until the maybe produces an error. Generates a test failure on this line if the maybe completes instead.
+`.waitForError() -> Error?` - Waits until the maybe produces an error. Generates a test failure on this line if the maybe completes instead.
 
 # Installation via Carthage
 

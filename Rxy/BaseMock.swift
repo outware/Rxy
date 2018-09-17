@@ -112,12 +112,32 @@ open class BaseMock: AsyncMock {
         return mockFunction(file: file, line: line, function: function, returning: result)
     }
 
+    /// Use when you need to mock a call to a function that returns an Observable.
+    ///
+    /// This function will automatically execute on a background thread. The result argument can be used to specify a range of
+    /// result options for the Maybe. If a nil is passed, then a RxyError.unexpectedFunctionCall(...) error is returned and
+    /// a Nimble fail is generated. Here's an example of using this function:
+    /// ```
+    /// class MockThing: Thing {
+    ///     var getObservableResult: ObservableResult<Int>?
+    ///     func getObservable() -> Observable<Int> {
+    ///         return mockFunction(returning: getObservableResult)
+    ///     }
+    /// }
+    /// ```
+    ///
+    /// - Parameter returning: An instance of ObservableResult that is queried for the mock result of the call.
+    /// - Parameter function: The function in the file that made the call. Defaults to the current function.
+    /// - Returns: An Observable that executes on a background thread.
+    public func mockFunction<T>(function: String = #function, returning result: ObservableResult<T>?) -> Observable<T> {
+        return mockFunction(file: file, line: line, function: function, returning: result)
+    }
+
     // MARK: - Dynamic variations
 
-    /// Use when you need to mock a call to a function that returns a Single with an unkknown value type.
+    /// Use when you need to mock a call to a function that accesses a mock, requesting different result types from that mock for each call.
     ///
-    /// This variation is used when you want to mock a call that returns an unknown type. To handle this, define the result as an 'Any' type
-    /// so that result values can be of any type.
+    /// By using the Any type, it's possible to match the value to be returned to the expected type for the call.
     ///
     /// This function will automatically execute on a background thread. The result argument can be used to specify a range of
     /// result options for the Single. If a nil is passed, then a RxyError.unexpectedFunctionCall(...) error is returned and
@@ -138,10 +158,9 @@ open class BaseMock: AsyncMock {
         return mockFunction(file: file, line: line, function: function, returning: result)
     }
 
-    // Use when you need to mock a call to a function that returns a Maybe with an unkknown value type.
+    /// Use when you need to mock a call to a function that accesses a mock, requesting different result types from that mock for each call.
     ///
-    /// This variation is used when you want to mock a call that returns an unknown type. To handle this, define the result as an 'Any' type
-    /// so that result values can be of any type.
+    /// By using the Any type, it's possible to match the value to be returned to the expected type for the call.
     ///
     /// This function will automatically execute on a background thread. The result argument can be used to specify a range of
     /// result options for the Maybe. If a nil is passed, then a RxyError.unexpectedFunctionCall(...) error is returned and
@@ -159,6 +178,29 @@ open class BaseMock: AsyncMock {
     /// - Parameter function: The function in the file that made the call. Defaults to the current function.
     /// - Returns: A Maybe that executes on a background thread.
     public func mockFunction<T>(function: String = #function, returning result: MaybeResult<Any>?) -> Maybe<T> {
+        return mockFunction(file: file, line: line, function: function, returning: result)
+    }
+
+    /// Use when you need to mock a call to a function that accesses a mock, requesting different result types from that mock for each call.
+    ///
+    /// By using the Any type, it's possible to match the value to be returned to the expected type for the call.
+    ///
+    /// This function will automatically execute on a background thread. The result argument can be used to specify a range of
+    /// result options for the Maybe. If a nil is passed, then a RxyError.unexpectedFunctionCall(...) error is returned and
+    /// a Nimble fail is generated. Here's an example of using this function:
+    /// ```
+    /// class MockThing: Thing {
+    ///     var getObservableResult: ObservableResult<Any>?
+    ///     func getObservable() -> Observable<Int> {
+    ///         return mockFunction(returning: getObservableResult)
+    ///     }
+    /// }
+    /// ```
+    ///
+    /// - Parameter returning: An instance of ObservableResult<Any> that is queried for the mock result of the call.
+    /// - Parameter function: The function in the file that made the call. Defaults to the current function.
+    /// - Returns: An Observable that executes on a background thread.
+    public func mockFunction<T>(function: String = #function, returning result: ObservableResult<Any>?) -> Observable<T> {
         return mockFunction(file: file, line: line, function: function, returning: result)
     }
 }

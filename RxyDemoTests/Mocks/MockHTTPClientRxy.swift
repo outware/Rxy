@@ -27,4 +27,9 @@ class MockHTTPClientRxy: BaseMock, HTTPClient {
         doMaybeURL = url
         return mockFunction(returning: doMaybeURLResult)
     }
+
+    var doObservableResults: ObservableResult<Int>?
+    func doObservable() -> Observable<Int> {
+        return mockFunction(returning: doObservableResults)
+    }
 }

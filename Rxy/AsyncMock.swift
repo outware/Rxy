@@ -93,6 +93,27 @@ public protocol AsyncMock {
     /// - Returns: A Maybe that executes on a background thread.
     func mockFunction<T>(file: String, line: UInt, function: String, returning result: MaybeResult<T>?) -> Maybe<T>
     
+    /// Use when you need to mock a call to a function that returns an Observable.
+    ///
+    /// This function will automatically execute on a background thread. The result argument can be used to specify a range of
+    /// result options for the Observable. If a nil is passed, then a RxyError.unexpectedFunctionCall(...) error is returned and
+    /// a Nimble fail is generated. Here's an example of using this function:
+    /// ```
+    /// class MockThing: Thing {
+    ///     var getObservableResult: ObservableResult<Int>?
+    ///     func getObservable() -> Observable<Int> {
+    ///         return mockFunction(returning: getObservableResult)
+    ///     }
+    /// }
+    /// ```
+    ///
+    /// - Parameter returning: An instance of ObservableResult that is queried for the mock result of the call.
+    /// - Parameter file: The file that made the call. Defaults to the current file using #file
+    /// - Parameter line: The line in the file that made the call. Defaults to the current line using #line
+    /// - Parameter function: The function in the file that made the call. Defaults to the current function using #function
+    /// - Returns: A Observable that executes on a background thread.
+    func mockFunction<T>(file: String, line: UInt, function: String, returning result: ObservableResult<T>?) -> Observable<T>
+    
     // MARK: Dynamic variations
     
     /// Use when you need to mock a call to a function that returns a Single with an unkknown value type.
@@ -119,7 +140,7 @@ public protocol AsyncMock {
     /// - Returns: A Single that executes on a background thread.
     func mockFunction<T>(file: String, line: UInt, function: String, returning result: SingleResult<Any>?) -> Single<T>
     
-    // Use when you need to mock a call to a function that returns a Maybe with an unkknown value type.
+    // Use when you need to mock a call to a function that returns a Maybe with an unknown value type.
     ///
     /// This variation is used when you want to mock a call that returns an unknown type. To handle this, define the result as an 'Any' type
     /// so that result values can be of any type.
@@ -143,6 +164,30 @@ public protocol AsyncMock {
     /// - Returns: A Maybe that executes on a background thread.
     func mockFunction<T>(file: String, line: UInt, function: String, returning result: MaybeResult<Any>?) -> Maybe<T>
 
+    // Use when you need to mock a call to a function that returns a Maybe with an unknown value type.
+    ///
+    /// This variation is used when you want to mock a call that returns an unknown type. To handle this, define the result as an 'Any' type
+    /// so that result values can be of any type.
+    ///
+    /// This function will automatically execute on a background thread. The result argument can be used to specify a range of
+    /// result options for the Observable. If a nil is passed, then a RxyError.unexpectedFunctionCall(...) error is returned and
+    /// a Nimble fail is generated. Here's an example of using this function:
+    /// ```
+    /// class MockThing: Thing {
+    ///     var getObservableResult: ObservableResult<Any>?
+    ///     func getObservable() -> Observable<Int> {
+    ///         return mockFunction(returning: getObservableResult)
+    ///     }
+    /// }
+    /// ```
+    ///
+    /// - Parameter returning: An instance of ObservableResult<Any> that is queried for the mock result of the call.
+    /// - Parameter file: The file that made the call. Defaults to the current file using #file
+    /// - Parameter line: The line in the file that made the call. Defaults to the current line using #line
+    /// - Parameter function: The function in the file that made the call. Defaults to the current function using #function
+    /// - Returns: An Observable that executes on a background thread.
+    func mockFunction<T>(file: String, line: UInt, function: String, returning result: ObservableResult<Any>?) -> Observable<T>
+
 }
 
 // MARK: - Implementation
@@ -153,32 +198,50 @@ public extension AsyncMock {
         fail("Unexpected function call \(function)", file: file, line: line)
     }
 
-    public func mockFunction(file: String = #file, line: UInt = #line, function: String = #function, returning result: CompletableResult?) -> Completable {
+    public func mockFunction(file: String = #file, line: UInt = #line, function: String = #function,
+                             returning result: CompletableResult?) -> Completable {
         return result?.resolve().executeInBackground() ?? .error(reportUnexpectedCall(file: file, line: line, function: function))
     }
 
-    public func mockFunction<T>(file: String = #file, line: UInt = #line, function: String = #function, returning result: SingleResult<T>?) -> Single<T> {
+    public func mockFunction<T>(file: String = #file, line: UInt = #line, function: String = #function,
+                                returning result: SingleResult<T>?) -> Single<T> {
         return result?.resolve().executeInBackground() ?? .error(reportUnexpectedCall(file: file, line: line, function: function))
     }
 
-    public func mockFunction<T>(file: String = #file, line: UInt = #line, function: String = #function, returning result: MaybeResult<T>?) -> Maybe<T> {
+    public func mockFunction<T>(file: String = #file, line: UInt = #line, function: String = #function,
+                                returning result: MaybeResult<T>?) -> Maybe<T> {
         return result?.resolve().executeInBackground() ?? .error(reportUnexpectedCall(file: file, line: line, function: function))
     }
 
-    public func mockFunction<T>(file: String = #file, line: UInt = #line, function: String = #function, returning result: SingleResult<Any>?) -> Single<T> {
+    public func mockFunction<T>(file: String = #file, line: UInt = #line, function: String = #function,
+                                returning result: ObservableResult<T>?) -> Observable<T> {
+        return result?.resolve().executeInBackground() ?? .error(reportUnexpectedCall(file: file, line: line, function: function))
+    }
+
+    public func mockFunction<T>(file: String = #file, line: UInt = #line, function: String = #function,
+                                returning result: SingleResult<Any>?) -> Single<T> {
         return result?.resolve().map { value -> T in
             return try self.cast(file: file, line: line, value: value)
             }
             .executeInBackground() ?? .error(reportUnexpectedCall(file: file, line: line, function: function))
     }
 
-    public func mockFunction<T>(file: String = #file, line: UInt = #line, function: String = #function, returning result: MaybeResult<Any>?) -> Maybe<T> {
+    public func mockFunction<T>(file: String = #file, line: UInt = #line, function: String = #function,
+                                returning result: MaybeResult<Any>?) -> Maybe<T> {
         return result?.resolve().map { value -> T in
             return try self.cast(file: file, line: line, value: value)
             }
             .executeInBackground() ?? .error(reportUnexpectedCall(file: file, line: line, function: function))
     }
-    
+
+    public func mockFunction<T>(file: String = #file, line: UInt = #line, function: String = #function,
+                                returning result: ObservableResult<Any>?) -> Observable<T> {
+        return result?.resolve().map { value -> T in
+            return try self.cast(file: file, line: line, value: value)
+            }
+            .executeInBackground() ?? .error(reportUnexpectedCall(file: file, line: line, function: function))
+    }
+
     // MARK: Internal functions
     
     /// Handles the casting of an unknown type to the desires result type.

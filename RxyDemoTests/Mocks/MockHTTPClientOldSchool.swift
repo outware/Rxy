@@ -51,4 +51,22 @@ class MockHTTPClientOldSchool: HTTPClient {
         }
         fatalError("Unexpected method call")
     }
+
+    var doObservableResults: [Int]?
+    var doObservableError: Error?
+    func doObservable() -> Observable<Int> {
+        guard doObservableResults != nil || doObservableError != nil else {
+            fatalError("Unexpected method call")
+        }
+        return Observable<Int>.create { observable in
+            if let results = self.doObservableResults {
+                results.forEach { observable.on(.next($0)) }
+                observable.on(.completed)
+            }
+            if let error = self.doObservableError {
+                observable.on(.error(error))
+            }
+            return Disposables.create()
+        }
+    }
 }
