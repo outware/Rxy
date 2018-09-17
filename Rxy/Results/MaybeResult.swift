@@ -4,58 +4,35 @@
 import RxSwift
 
 /// Result type for mocks which return a Maybe. MaybeResults can return values, completed or errors.
-public final class MaybeResult<T>: Result<MaybeEvent<T>>, Resolvable {
+public final class MaybeResult<T>: Result<T, Maybe<T>> {
 
     public static func completed() -> Self {
-        return self.init { maybe in
-            maybe(.completed)
+        return self.init { observable in
+            observable.on(.completed)
         }
     }
 
     public static func `value`(_ value: @autoclosure @escaping () -> T) -> Self {
-        return self.init { maybe in
-            maybe(.success(value()))
+        return self.init { observable in
+            observable.on(.next(value()))
+            observable.on(.completed)
         }
     }
 
     public static func `value`(_ value: @escaping () -> T) -> Self {
-        return self.init { single in
-            single(.success(value()))
+        return self.init { observable in
+            observable.on(.next(value()))
+            observable.on(.completed)
         }
     }
 
     public static func `throw`(_ error: Error) -> Self {
-        return self.init { maybe in
-            maybe(.error(error))
+        return self.init { observable in
+            observable.on(.error(error))
         }
     }
 
-    var resolved: Maybe<T> {
-        return Maybe<T>.create { maybe in
-            return self.resolve(maybe)
-        }
+    override var resolved: Maybe<T> {
+        return super.resolveObservable.asMaybe()
     }
 }
-
-public extension MaybeResult where T:Decodable {
-
-    public static func json(_ json: String) -> Self {
-        return loadJSON(
-            successClosure: { $0(.success($1)) },
-            errorClosure: { $0(.error($1)) },
-            getDataClosure: { json.data(using: .utf8) },
-            noDataError: RxyError.invalidData,
-            sourceJSON: json
-        )
-    }
-
-    public static func json(fromFile: String, extension ext: String? = "json", inBundleWithClass aClass: AnyClass) -> Self {
-        return loadJSON(
-            successClosure: { $0(.success($1)) },
-            errorClosure: { $0(.error($1)) },
-            getDataClosure: { Bundle.contentsOfFile(fromFile, extension: ext, fromBundleWithClass: aClass) },
-            noDataError: RxyError.fileNotFound
-        )
-    }
-}
-

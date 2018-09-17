@@ -3,35 +3,8 @@
 
 import RxSwift
 
-public class BaseResult<T, O>: Resolvable {
-    
-    var eventFactory: (AnyObserver<T>) -> Void
-    
-    required init(factory: @escaping (AnyObserver<T>) -> Void) {
-        self.eventFactory = factory
-    }
-    
-    var resolveObservable: Observable<T> {
-        return Observable<T>.create { observable in
-            self.eventFactory(observable)
-            return Disposables.create()
-        }
-    }
-    
-    var resolved: O {
-        fatalError()
-    }
-}
-
-
 /// Result type for mocks which return an Observable. ObservableResults can return any number of values sequenced or timed and with or without errors.
-public final class ObservableResult<T>: Resolvable {
-
-    var eventFactory: (AnyObserver<T>) -> Void
-
-    required init(factory: @escaping (AnyObserver<T>) -> Void) {
-        self.eventFactory = factory
-    }
+public final class ObservableResult<T>: Result<T, Observable<T>> {
 
     public static func generate(using: @escaping (AnyObserver<T>) -> Void) -> Self {
         return self.init { observable in
@@ -39,7 +12,7 @@ public final class ObservableResult<T>: Resolvable {
         }
     }
 
-    public static func values(_ values:[T]) -> Self {
+    public static func sequence(_ values:[T]) -> Self {
         return self.init { observable in
             values.forEach { observable.on(.next($0)) }
             observable.on(.completed)
@@ -52,10 +25,7 @@ public final class ObservableResult<T>: Resolvable {
         }
     }
 
-    var resolved: Observable<T> {
-        return Observable<T>.create { observable in
-            self.eventFactory(observable)
-            return Disposables.create()
-        }
+    override var resolved: Observable<T> {
+        return super.resolveObservable
     }
 }

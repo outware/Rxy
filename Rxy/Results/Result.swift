@@ -3,42 +3,59 @@
 
 import RxSwift
 
-/// The abstract parent of Result classes.
-public class Result<EventType> {
-
-    typealias EventClosure = (EventType) -> Void
-
-    var eventFactory: (@escaping EventClosure) -> Void
-
-    required init(factory: @escaping (@escaping EventClosure) -> Void) {
+public class Result<T, O>: Resolvable {
+    
+    var eventFactory: (AnyObserver<T>) -> Void
+    
+    required init(factory: @escaping (AnyObserver<T>) -> Void) {
         self.eventFactory = factory
     }
+    
+    var resolveObservable: Observable<T> {
+        return Observable<T>.create { observable in
+            self.eventFactory(observable)
+            return Disposables.create()
+        }
+    }
+    
+    var resolved: O {
+        fatalError()
+    }
+}
 
-    func resolve(_ event: @escaping EventClosure) -> Disposable {
-        self.eventFactory(event)
-        return Disposables.create()
+public extension Result where T: Decodable {
+    
+    public static func json(_ json: String) -> Self {
+        return loadJSON(getDataClosure: { json.data(using: .utf8) }, noDataError: RxyError.invalidData, sourceJSON: json)
+    }
+    
+    public static func json(fromFile: String, extension ext: String? = "json", inBundleWithClass aClass: AnyClass) -> Self {
+        return loadJSON(
+            getDataClosure: { Bundle.contentsOfFile(fromFile, extension: ext, fromBundleWithClass: aClass) },
+            noDataError: RxyError.fileNotFound
+        )
     }
 
-    static func loadJSON<ValueType>(
-        successClosure: @escaping (@escaping EventClosure, ValueType) -> Void,
-        errorClosure: @escaping (@escaping EventClosure, Error) -> Void,
+    static func loadJSON(
         getDataClosure : @escaping () -> Data?,
         noDataError: Error,
-        sourceJSON: String? = nil) -> Self where ValueType: Decodable {
-
-        return self.init { single in
+        sourceJSON: String? = nil) -> Self {
+        
+        return self.init { observable in
             do {
                 guard let data = getDataClosure() else {
-                    errorClosure(single, noDataError)
+                    observable.on(.error(noDataError))
                     return
                 }
-
+                
                 let decoder = JSONDecoder.init()
-                let obj = try decoder.decode(ValueType.self, from: data)
-                successClosure(single, obj)
+                let obj = try decoder.decode(T.self, from: data)
+                
+                observable.on(.next(obj))
+                observable.on(.completed)
             }
             catch let error {
-                errorClosure(single, RxyError.decodingError(expected: ValueType.self, fromJSON: sourceJSON, error: error))
+                observable.on(.error(RxyError.decodingError(expected: T.self, fromJSON: sourceJSON, error: error)))
             }
         }
     }
