@@ -26,7 +26,12 @@ private class MockSomething: AsyncMock {
     func doMaybeThing() -> Maybe<Int> {
         return mockFunction(returning: doMaybeThingResult)
     }
-    
+
+    var doObservableThingResult: ObservableResult<Int>?
+    func doObservableThing() -> Observable<Int> {
+        return mockFunction(returning: doObservableThingResult)
+    }
+
     // MARK: Dynamic results
     
     var doDynamicSingleThingResult: SingleResult<Any>?
@@ -38,6 +43,12 @@ private class MockSomething: AsyncMock {
     func doDynamicMaybeThing<T>() -> Maybe<T> {
         return mockFunction(returning: doDynamicMaybeThingResult)
     }
+    
+    var doDynamicObservableThingResult: ObservableResult<Any>?
+    func doDynamicObservableThing<T>() -> Observable<T> {
+        return mockFunction(returning: doDynamicObservableThingResult)
+    }
+
 }
 
 class AsyncMockTests: XCTestCase {
@@ -100,7 +111,29 @@ class AsyncMockTests: XCTestCase {
             mock.doMaybeThing().waitForCompletion()
         }
     }
+
+    func testMockFunctionObservableGeneratesResult() {
+        mock.doObservableThingResult = .generate { observable in
+            observable.on(.next(1))
+            observable.on(.next(2))
+            observable.on(.next(3))
+            observable.on(.completed)
+        }
+        mock.doObservableThing().waitForCompletion()
+    }
     
+    func testMockFunctionObservableReturnsValue() {
+        mock.doObservableThingResult = .sequence([1,2,3])
+        let result = mock.doObservableThing().waitForCompletion()
+        expect(result) == [1,2,3]
+    }
+    
+    func testMockFunctionObservableTriggersUnexpectedFunctionCall() {
+        expectNimble(error: "Expected successful completion, got a RxyError.unexpectedFunctionCall(\"doObservableThing()\") instead") {
+            mock.doObservableThing().waitForCompletion()
+        }
+    }
+
     // MARK: - Complex examples
 
     func testDynamicSingleExample() {
@@ -156,6 +189,34 @@ class AsyncMockTests: XCTestCase {
     func testDynamicMaybeExampleTriggersUnexpectedFunctionCall() {
         expectNimble(error: "Expected a value, got error RxyError.unexpectedFunctionCall(\"doDynamicMaybeThing()\") instead") {
             let _: Int? = mock.doDynamicMaybeThing().waitForValue()
+        }
+    }
+
+    func testDynamicObservableExample() {
+        
+        // First a int
+        mock.doDynamicObservableThingResult = .sequence([1,2,3])
+        let result1: [Int]? = mock.doDynamicObservableThing().waitForCompletion()
+        expect(result1) == [1,2,3]
+        
+        // Then a string
+        mock.doDynamicObservableThingResult = .sequence(["abc", "def"])
+        let result2: [String]? = mock.doDynamicObservableThing().waitForCompletion()
+        expect(result2) == ["abc", "def"]
+    }
+    
+    func testDynamicObservableExampleWithTypeCastFailure() {
+        
+        mock.doDynamicObservableThingResult = .sequence([1,2,3])
+        
+        expectNimble(error: "Expected successful completion, got a RxyError.wrongType(expected: Swift.String, found: Swift.Int) instead") {
+            let _: [String]? = mock.doDynamicObservableThing().waitForCompletion()
+        }
+    }
+    
+    func testDynamicObservableExampleTriggersUnexpectedFunctionCall() {
+        expectNimble(error: "Expected successful completion, got a RxyError.unexpectedFunctionCall(\"doDynamicObservableThing()\") instead") {
+            let _: [Int]? = mock.doDynamicObservableThing().waitForCompletion()
         }
     }
 }
