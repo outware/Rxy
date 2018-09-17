@@ -30,7 +30,12 @@ private class MockSomething: BaseMock {
     func doMaybeThing() -> Maybe<Int> {
         return mockFunction(returning: doMaybeThingResult)
     }
-    
+
+    var doObservableThingResult: ObservableResult<Int>?
+    func doObservableThing() -> Observable<Int> {
+        return mockFunction(returning: doObservableThingResult)
+    }
+
     // MARK: Dynamic results
     
     var doDynamicSingleThingResult: SingleResult<Any>?
@@ -41,6 +46,11 @@ private class MockSomething: BaseMock {
     var doDynamicMaybeThingResult: MaybeResult<Any>?
     func doDynamicMaybeThing<T>() -> Maybe<T> {
         return mockFunction(returning: doDynamicMaybeThingResult)
+    }
+
+    var doDynamicObservableThingResult: ObservableResult<Any>?
+    func doDynamicObservableThing<T>() -> Observable<T> {
+        return mockFunction(returning: doDynamicObservableThingResult)
     }
 }
 
@@ -74,6 +84,13 @@ class BaseMockTests: XCTestCase {
         }
     }
 
+    func testObservableMockErrorPutsErrorOnMockDeclaration() {
+        expectNimble(error: "Unexpected function call doObservableThing()", atLine: #line + 1) {
+            let mock = MockSomething()
+            mock.doObservableThing().waitForCompletion()
+        }
+    }
+
     func testDynamicSingleMockErrorPutsErrorOnMockDeclaration() {
         expectNimble(error: "Unexpected function call doDynamicSingleThing()", atLine: #line + 1) {
             let mock = MockSomething()
@@ -85,6 +102,13 @@ class BaseMockTests: XCTestCase {
         expectNimble(error: "Unexpected function call doDynamicMaybeThing()", atLine: #line + 1) {
             let mock = MockSomething()
             let _: Int? = mock.doDynamicMaybeThing().waitForValue()
+        }
+    }
+
+    func testDynamicObservableMockErrorPutsErrorOnMockDeclaration() {
+        expectNimble(error: "Unexpected function call doDynamicObservableThing()", atLine: #line + 1) {
+            let mock = MockSomething()
+            let _: [Int]? = mock.doDynamicObservableThing().waitForCompletion()
         }
     }
 }
