@@ -43,6 +43,10 @@
 		6CA6FEB4214953D70094D75C /* Maybe+NimbleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CA6FEB3214953D70094D75C /* Maybe+NimbleTests.swift */; };
 		6CBE1798214AAC7F00AF1136 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CBE1797214AAC7F00AF1136 /* Result.swift */; };
 		6CD223CC214F36DD0097C4A6 /* JSONTestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CD223CB214F36DC0097C4A6 /* JSONTestData.swift */; };
+		6CD223CE214F41E30097C4A6 /* ObservableResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CD223CD214F41E30097C4A6 /* ObservableResult.swift */; };
+		6CD223D0214F5ABB0097C4A6 /* ObservableResultTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CD223CF214F5ABB0097C4A6 /* ObservableResultTests.swift */; };
+		6CD223D2214F5BA80097C4A6 /* Observable+Nimble.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CD223D1214F5BA80097C4A6 /* Observable+Nimble.swift */; };
+		6CD223D4214F637A0097C4A6 /* Observable+NimbleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CD223D3214F637A0097C4A6 /* Observable+NimbleTests.swift */; };
 		6CEED9092141FCE700331356 /* abc.json in Resources */ = {isa = PBXBuildFile; fileRef = 6CEED9072141FCC300331356 /* abc.json */; };
 		6CEED90B2141FD0600331356 /* Bundle+ExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CEED90A2141FD0600331356 /* Bundle+ExtensionsTests.swift */; };
 		6CEED90D21420BDC00331356 /* invalid.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6CEED90C21420BDC00331356 /* invalid.jpg */; };
@@ -156,6 +160,10 @@
 		6CA6FEB3214953D70094D75C /* Maybe+NimbleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Maybe+NimbleTests.swift"; sourceTree = "<group>"; };
 		6CBE1797214AAC7F00AF1136 /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		6CD223CB214F36DC0097C4A6 /* JSONTestData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONTestData.swift; sourceTree = "<group>"; };
+		6CD223CD214F41E30097C4A6 /* ObservableResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservableResult.swift; sourceTree = "<group>"; };
+		6CD223CF214F5ABB0097C4A6 /* ObservableResultTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservableResultTests.swift; sourceTree = "<group>"; };
+		6CD223D1214F5BA80097C4A6 /* Observable+Nimble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Observable+Nimble.swift"; sourceTree = "<group>"; };
+		6CD223D3214F637A0097C4A6 /* Observable+NimbleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Observable+NimbleTests.swift"; sourceTree = "<group>"; };
 		6CEED9072141FCC300331356 /* abc.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = abc.json; sourceTree = "<group>"; };
 		6CEED90A2141FD0600331356 /* Bundle+ExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+ExtensionsTests.swift"; sourceTree = "<group>"; };
 		6CEED90C21420BDC00331356 /* invalid.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = invalid.jpg; sourceTree = "<group>"; };
@@ -281,6 +289,7 @@
 				6CA6FE9921494CED0094D75C /* Resolvable.swift */,
 				6CBE1797214AAC7F00AF1136 /* Result.swift */,
 				6CA6FE82214945830094D75C /* SingleResult.swift */,
+				6CD223CD214F41E30097C4A6 /* ObservableResult.swift */,
 			);
 			path = Results;
 			sourceTree = "<group>";
@@ -292,6 +301,7 @@
 				6C3BBB312140E1E800EB05DD /* SingleResultTests.swift */,
 				6CA6FEA3214950C30094D75C /* MaybeResultTests.swift */,
 				6CD223CB214F36DC0097C4A6 /* JSONTestData.swift */,
+				6CD223CF214F5ABB0097C4A6 /* ObservableResultTests.swift */,
 			);
 			path = Results;
 			sourceTree = "<group>";
@@ -303,6 +313,7 @@
 				6CA6FEAA214952C70094D75C /* Maybe+Nimble.swift */,
 				6C83A57B2137C94E00CE2222 /* Rx+Nimble.swift */,
 				6CA6FEA8214952990094D75C /* Single+Nimble.swift */,
+				6CD223D1214F5BA80097C4A6 /* Observable+Nimble.swift */,
 			);
 			path = Nimble;
 			sourceTree = "<group>";
@@ -313,6 +324,7 @@
 				6CA6FEB12149537F0094D75C /* Completable+NimbleTests.swift */,
 				6CA6FEB3214953D70094D75C /* Maybe+NimbleTests.swift */,
 				6CA6FEAF2149533D0094D75C /* Single+NimbleTests.swift */,
+				6CD223D3214F637A0097C4A6 /* Observable+NimbleTests.swift */,
 			);
 			path = Nimble;
 			sourceTree = "<group>";
@@ -498,6 +510,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6C1908F9213E2A08003121A2 /* Rx+Threading.swift in Sources */,
+				6CD223CE214F41E30097C4A6 /* ObservableResult.swift in Sources */,
 				6C1908FB213E3A77003121A2 /* BaseMock.swift in Sources */,
 				6C83A5702137B22200CE2222 /* AsyncMock.swift in Sources */,
 				6CA6FE9A21494CED0094D75C /* Resolvable.swift in Sources */,
@@ -505,6 +518,7 @@
 				6CBE1798214AAC7F00AF1136 /* Result.swift in Sources */,
 				6CA6FE85214945B30094D75C /* MaybeResult.swift in Sources */,
 				6CA6FEA7214952480094D75C /* Completable+Nimble.swift in Sources */,
+				6CD223D2214F5BA80097C4A6 /* Observable+Nimble.swift in Sources */,
 				6CA6FEA9214952990094D75C /* Single+Nimble.swift in Sources */,
 				6CA6FE83214945830094D75C /* SingleResult.swift in Sources */,
 				6CA6FE812149454D0094D75C /* CompletableResult.swift in Sources */,
@@ -521,12 +535,14 @@
 				6C1908FD213E3C94003121A2 /* BaseMockTests.swift in Sources */,
 				6CA2CB8A213CBD85003B73AB /* AssertionValidator.swift in Sources */,
 				6CA6FEB22149537F0094D75C /* Completable+NimbleTests.swift in Sources */,
+				6CD223D4214F637A0097C4A6 /* Observable+NimbleTests.swift in Sources */,
 				6C3BBB322140E1E800EB05DD /* SingleResultTests.swift in Sources */,
 				6CEED90B2141FD0600331356 /* Bundle+ExtensionsTests.swift in Sources */,
 				6CA6FEA4214950C30094D75C /* MaybeResultTests.swift in Sources */,
 				6CD223CC214F36DD0097C4A6 /* JSONTestData.swift in Sources */,
 				6CA6FEB02149533D0094D75C /* Single+NimbleTests.swift in Sources */,
 				6CA6FEB4214953D70094D75C /* Maybe+NimbleTests.swift in Sources */,
+				6CD223D0214F5ABB0097C4A6 /* ObservableResultTests.swift in Sources */,
 				6C1908F7213D0E15003121A2 /* TestSupport.swift in Sources */,
 				6C83A55A2137A9B000CE2222 /* AsyncMockTests.swift in Sources */,
 				6CA6FEA22149508B0094D75C /* CompletableResultTests.swift in Sources */,

@@ -19,7 +19,8 @@ class Single_NimbleTests: XCTestCase {
     }
 
     func testWaitForError() {
-        expect(Single<Int>.error(TestError.anError).executeInBackground().waitForError()).to(matchError(TestError.anError))
+        expect(Single<Int>.error(TestError.anError).executeInBackground()
+            .waitForError()).to(matchError(TestError.anError))
     }
 
     func testWaitForErrorGeneratesNimbleErrorOnCompletation() {

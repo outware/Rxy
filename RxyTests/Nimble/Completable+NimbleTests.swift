@@ -19,7 +19,8 @@ class Completable_NimbleTests: XCTestCase {
     }
 
     func testWaitForError() {
-        expect(Completable.error(TestError.anError).executeInBackground().waitForError()).to(matchError(TestError.anError))
+        expect(Completable.error(TestError.anError).executeInBackground().waitForError())
+            .to(matchError(TestError.anError))
     }
 
     func testWaitForErrorGeneratesNimbleErrorOnCompletation() {
