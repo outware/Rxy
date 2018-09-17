@@ -303,7 +303,7 @@ Lets take a look at the options and waits based on the available Rx types. Note:
         observable.on(.next(5))
         observable.on(.completed)
     }
-````
+```
 
 `.sequence(_ values: [Error]T])` - Returns an observable the values in the passed array individually returned from the observable.
 
