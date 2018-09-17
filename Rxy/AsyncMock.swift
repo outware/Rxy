@@ -154,26 +154,26 @@ public extension AsyncMock {
     }
 
     public func mockFunction(file: String = #file, line: UInt = #line, function: String = #function, returning result: CompletableResult?) -> Completable {
-        return result?.resolved.executeInBackground() ?? .error(reportUnexpectedCall(file: file, line: line, function: function))
+        return result?.resolve().executeInBackground() ?? .error(reportUnexpectedCall(file: file, line: line, function: function))
     }
 
     public func mockFunction<T>(file: String = #file, line: UInt = #line, function: String = #function, returning result: SingleResult<T>?) -> Single<T> {
-        return result?.resolved.executeInBackground() ?? .error(reportUnexpectedCall(file: file, line: line, function: function))
+        return result?.resolve().executeInBackground() ?? .error(reportUnexpectedCall(file: file, line: line, function: function))
     }
 
     public func mockFunction<T>(file: String = #file, line: UInt = #line, function: String = #function, returning result: MaybeResult<T>?) -> Maybe<T> {
-        return result?.resolved.executeInBackground() ?? .error(reportUnexpectedCall(file: file, line: line, function: function))
+        return result?.resolve().executeInBackground() ?? .error(reportUnexpectedCall(file: file, line: line, function: function))
     }
 
     public func mockFunction<T>(file: String = #file, line: UInt = #line, function: String = #function, returning result: SingleResult<Any>?) -> Single<T> {
-        return result?.resolved.map { value -> T in
+        return result?.resolve().map { value -> T in
             return try self.cast(file: file, line: line, value: value)
             }
             .executeInBackground() ?? .error(reportUnexpectedCall(file: file, line: line, function: function))
     }
 
     public func mockFunction<T>(file: String = #file, line: UInt = #line, function: String = #function, returning result: MaybeResult<Any>?) -> Maybe<T> {
-        return result?.resolved.map { value -> T in
+        return result?.resolve().map { value -> T in
             return try self.cast(file: file, line: line, value: value)
             }
             .executeInBackground() ?? .error(reportUnexpectedCall(file: file, line: line, function: function))

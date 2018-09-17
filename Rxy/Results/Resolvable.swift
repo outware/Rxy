@@ -6,6 +6,6 @@ import RxSwift
 /// Resolvables can be asked to produce a result.
 protocol Resolvable {
     associatedtype Sequence
-    var resolved: Sequence { get }
+    func resolve() -> Sequence
 }
 

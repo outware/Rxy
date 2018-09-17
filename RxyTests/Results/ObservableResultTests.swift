@@ -7,16 +7,25 @@ import Nimble
 
 class ObservableResultTests: XCTestCase {
     
-    func testNextValue() {
+    func testGenerateNextValue() {
         expect(ObservableResult<String>.generate { observable in
             observable.on(.next("abc"))
             observable.onCompleted()
-        }.resolved.waitForCompletion()) == ["abc"]
+        }.resolve().waitForCompletion()) == ["abc"]
     }
     
-    func testSuccess() {
+    func testGenerateError() {
         expect(ObservableResult<String>.generate { observable in
             observable.on(.error(TestError.anError))
-            }.resolved.waitForError().error).to(matchError(TestError.anError))
+            }.resolve().waitForError().error).to(matchError(TestError.anError))
     }
+    
+    func testSequence() {
+        expect(ObservableResult<Int>.sequence([1,2,3]).resolve().waitForCompletion()) == [1,2,3]
+    }
+
+    func testThrow() {
+        expect(ObservableResult<String>.throw(TestError.anError).resolve().waitForError().error).to(matchError(TestError.anError))
+    }
+
 }

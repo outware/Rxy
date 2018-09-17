@@ -286,10 +286,10 @@
 			children = (
 				6CA6FE802149454D0094D75C /* CompletableResult.swift */,
 				6CA6FE84214945B30094D75C /* MaybeResult.swift */,
+				6CD223CD214F41E30097C4A6 /* ObservableResult.swift */,
 				6CA6FE9921494CED0094D75C /* Resolvable.swift */,
 				6CBE1797214AAC7F00AF1136 /* Result.swift */,
 				6CA6FE82214945830094D75C /* SingleResult.swift */,
-				6CD223CD214F41E30097C4A6 /* ObservableResult.swift */,
 			);
 			path = Results;
 			sourceTree = "<group>";
@@ -298,10 +298,10 @@
 			isa = PBXGroup;
 			children = (
 				6CA6FEA12149508B0094D75C /* CompletableResultTests.swift */,
-				6C3BBB312140E1E800EB05DD /* SingleResultTests.swift */,
-				6CA6FEA3214950C30094D75C /* MaybeResultTests.swift */,
 				6CD223CB214F36DC0097C4A6 /* JSONTestData.swift */,
+				6CA6FEA3214950C30094D75C /* MaybeResultTests.swift */,
 				6CD223CF214F5ABB0097C4A6 /* ObservableResultTests.swift */,
+				6C3BBB312140E1E800EB05DD /* SingleResultTests.swift */,
 			);
 			path = Results;
 			sourceTree = "<group>";

@@ -15,7 +15,7 @@ public extension Observable {
     }
 
     /**
-     Waits for a Completable to complete.
+     Waits for an Observable to complete.
      */
     @discardableResult public func waitForCompletion(file: FileString = #file, line: UInt = #line) -> [Element] {
         switch result {
@@ -32,7 +32,7 @@ public extension Observable {
     /**
      Waits for an error to be produced.
      
-     If the Completable completes without an error, is produced a Nimble failure is generated and a nil returned.
+     If the Observable completes without an error, is produced a Nimble failure is generated and a nil returned.
      */
     @discardableResult public func waitForError(file: FileString = #file, line: UInt = #line) -> (error: Error?, values: [Element]) {
         

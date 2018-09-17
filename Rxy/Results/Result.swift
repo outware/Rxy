@@ -3,7 +3,7 @@
 
 import RxSwift
 
-public class Result<T, O>: Resolvable {
+public class Result<T, O> {
     
     var eventFactory: (AnyObserver<T>) -> Void
     
@@ -11,24 +11,36 @@ public class Result<T, O>: Resolvable {
         self.eventFactory = factory
     }
     
-    var resolveObservable: Observable<T> {
+    func resolveObservable() -> Observable<T> {
         return Observable<T>.create { observable in
             self.eventFactory(observable)
             return Disposables.create()
         }
     }
-    
-    var resolved: O {
-        fatalError()
-    }
 }
 
+/// Extension which can load data when the type being returned is a Decodable.
 public extension Result where T: Decodable {
-    
+
+    /**
+     Creates the desired instances from a passed string containing JSON.
+     
+     - Parameter json: A string containing JSON that will be loaded into an instance of the returned type.
+    */
     public static func json(_ json: String) -> Self {
         return loadJSON(getDataClosure: { json.data(using: .utf8) }, noDataError: RxyError.invalidData, sourceJSON: json)
     }
-    
+
+    /**
+     Creates the desired instance from the contents of a file.
+     
+     It is assumed that the file contains JSON.
+     
+     - Parameter fromFile: The file that contains the JSON. This file must be in a bundle. The name can include an extension or use
+     the default of '.json'.
+     - Parameter extension: The extension of the file to search for. The default for this is '.json'.
+     - Parameter inBundleWithClass: When the file is located in a different bundle, pass a class to this argument to locate the relevant bundle.
+     */
     public static func json(fromFile: String, extension ext: String? = "json", inBundleWithClass aClass: AnyClass) -> Self {
         return loadJSON(
             getDataClosure: { Bundle.contentsOfFile(fromFile, extension: ext, fromBundleWithClass: aClass) },
