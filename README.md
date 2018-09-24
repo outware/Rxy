@@ -1,6 +1,6 @@
 #  Rxy - Pragmatic RxSwift unit testing
 
-Version 0.3.0
+Version 0.4.0
 
 A collection of useful functions and classes that can simplify testing of RxSwift code. 
 
