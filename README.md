@@ -2,8 +2,6 @@
 
 Version 0.4.0
 
-[TOC]
-
 A collection of useful functions and classes that can simplify testing of RxSwift code. 
 
 **Features:**
@@ -19,6 +17,33 @@ To achieve this, Rxy uses 3 core things:
 * __`waitFor*()`__ functions which wait on asynchronous Rx calls, then validate the results.
 * __`*Result`__ classes which provide centralised configuration of mock responses.
 * __`mockFunction(…)`__ functions which execute asynchronously in the background to simulate RxSwift functionality.
+
+Table of Contents
+=================
+
+   * [Rxy - Pragmatic RxSwift unit testing](#rxy---pragmatic-rxswift-unit-testing)
+   * [Table of Contents](#table-of-contents)
+   * [Guide](#guide)
+      * [Demo project](#demo-project)
+      * [Mocking protocols](#mocking-protocols)
+         * [Partial mocks](#partial-mocks)
+      * [Unit Testing](#unit-testing)
+         * [A complex example](#a-complex-example)
+   * [Reference](#reference)
+      * [Observables](#observables)
+         * [Mock value options](#mock-value-options)
+         * [Waits](#waits)
+      * [Completables](#completables)
+         * [Mock value options](#mock-value-options-1)
+         * [Waits](#waits-1)
+      * [Singles](#singles)
+         * [Mock value options](#mock-value-options-2)
+         * [Waits](#waits-2)
+      * [Maybes](#maybes)
+         * [Mock value options](#mock-value-options-3)
+         * [Waits](#waits-3)
+   * [Installation](#installation)
+      * [Carthage](#carthage)
 
 # Guide
 
@@ -319,9 +344,9 @@ Ta - Da!
 
 Lets take a look at the options Rxy provides for each of the available Rx types: `Observable<T>`, `Completable`, `Single<T>` and `Maybe<T>`. For each one I'll first list the functions that define the available result for the mocks, then the available wait functions you can use to wait and validate.
 
-### Observables
+## Observables
 
-#### Mock value options
+### Mock value options
 
 `.generate(using: @escaping (AnyObserver<T>) -> Void)` - Returns an observable which uses the passed closure to generate results like this:
 
@@ -336,29 +361,29 @@ Lets take a look at the options Rxy provides for each of the available Rx types:
 
 `.throw(_ error: Error)` - Returns an observable with the error.
 
-#### Waits
+### Waits
 
 `.waitForCompletion() -> [T]` - Waits until the observable completes. Generates a test failure on this line if the completable produces an error. Returns the values returned by the Observable.
 
 `.waitForError() -> (error: Error, values: [T])` - Waits until the completable produces an error. Generates a test failure on this line if the completable completes instead. Returns a tuple containing both the error and any returned values.
 
-### Completables
+## Completables
 
-#### Mock value options
+### Mock value options
 
 `.completed()` - Returns a completed completable.
 
 `.throw(_ error: Error)` - Returns a completable with the error.
 
-#### Waits
+### Waits
 
 `.waitForCompletion()` - Waits until the completable completes. Generates a test failure on this line if the completable produces an error. 
 
 `.waitForError() -> Error?` - Waits until the completable produces an error. Generates a test failure on this line if the completable completes instead.
 
-### Singles
+## Singles
 
-#### Mock value options
+### Mock value options
 
 `.value(_ value: T)` - Returns the passed value as the result of the single. 
 
@@ -370,15 +395,15 @@ Lets take a look at the options Rxy provides for each of the available Rx types:
 
 `.throw(_ error: Error)` - Returns a single with the error.
 
-#### Waits
+### Waits
 
 `.waitForSuccess() -> T?` - Waits until the single completes. Generates a test failure on this line if the single produces an error or if another error occurs such as a JSON value being incorrect. Returns the value produced by the Single.
 
 `.waitForError() -> Error?` - Waits until the single produces an error. Generates a test failure on this line if the single completes instead.
 
-### Maybes
+## Maybes
 
-#### Mock value options
+### Mock value options
 
 `.completed()` - Returns a completed maybe.
 
@@ -392,7 +417,7 @@ Lets take a look at the options Rxy provides for each of the available Rx types:
 
 `.throw(_ error: Error)` - Returns a maybe with the error.
 
-#### Waits
+### Waits
 
 `.waitForCompletion()` - Waits until the maybe completes. Generates a test failure on this line if the maybe produces an error or if it produces a value instead of completing.
 
@@ -406,7 +431,7 @@ Lets take a look at the options Rxy provides for each of the available Rx types:
 
 Add this to your **Cartfile.private** file:
 
-```swiftq
+```swift
 github "outware/Rxy"
 ```
 
