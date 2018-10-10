@@ -4,6 +4,8 @@ Version 0.4.0
 
 A collection of useful functions and classes that can simplify testing of RxSwift code. 
 
+{{TOC}}
+
 #### Features:
 
 * 'wait…' functions that wait for asynchronous RxSwift code to execute before testing the results and adding errors to Xcode's test report if the results aren't as expected.
