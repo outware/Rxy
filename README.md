@@ -4,12 +4,12 @@ Version 0.4.0
 
 A collection of useful functions and classes that can simplify testing of RxSwift code. 
 
- * [Guide][guide]
-    * [Demo project][demoproject]
-    * [Mocking protocols][mockingprotocols]
-    * [Unit Testing][unittesting]
- * [Reference][reference]
- * [Installation][installation]
+ * [Guide](#guide)
+    * [Demo project](#demoproject)
+    * [Mocking protocols](#mockingprotocols)
+    * [Unit Testing](#unittesting)
+ * [Reference](#reference)
+ * [Installation](#installation)
 
 #### Features:
 
