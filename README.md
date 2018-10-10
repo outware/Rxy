@@ -2,16 +2,11 @@
 
 Version 0.4.0
 
+[TOC]
+
 A collection of useful functions and classes that can simplify testing of RxSwift code. 
 
- * [Guide](#guide)
-    * [Demo project](#demoproject)
-    * [Mocking protocols](#mockingprotocols)
-    * [Unit Testing](#unittesting)
- * [Reference](#reference)
- * [Installation](#installation)
-
-#### Features:
+**Features:**
 
 * 'wait…' functions that wait for asynchronous RxSwift code to execute before testing the results and adding errors to Xcode's test report if the results aren't as expected.
 * Support functions for building RxSwift based mocks which execute asynchronously so that the mock's threading model matches your implementations.
