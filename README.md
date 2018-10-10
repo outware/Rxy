@@ -4,7 +4,12 @@ Version 0.4.0
 
 A collection of useful functions and classes that can simplify testing of RxSwift code. 
 
-{{TOC}}
+ * [Guide][guide]
+    * [Demo project][demoproject]
+    * [Mocking protocols][mockingprotocols]
+    * [Unit Testing][unittesting]
+ * [Reference][reference]
+ * [Installation][installation]
 
 #### Features:
 
@@ -400,7 +405,9 @@ Lets take a look at the options Rxy provides for each of the available Rx types:
 
 `.waitForError() -> Error?` - Waits until the maybe produces an error. Generates a test failure on this line if the maybe completes instead.
 
-# Installation via Carthage
+# Installation
+
+## Carthage
 
 Add this to your **Cartfile.private** file:
 
