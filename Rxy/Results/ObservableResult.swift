@@ -4,7 +4,7 @@
 import RxSwift
 
 /// Result type for mocks which return an Observable. ObservableResults can return any number of values sequenced or timed and with or without errors.
-public final class ObservableResult<T>: Result<T, Observable<T>>, Resolvable {
+public final class ObservableResult<T>: Result<T>, Resolvable {
 
     /**
     Returns an Observable which produces values from the passed closure. The observable event is passed to the closure so values can be returned.

@@ -4,7 +4,7 @@
 import RxSwift
 
 /// Result type for mocks which return a Completable. CompletableResults can return completed or errors.
-public final class CompletableResult: Result<Any, Completable>, Resolvable {
+public final class CompletableResult: Result<Any>, Resolvable {
     
     /**
     Returns a completed Completable.

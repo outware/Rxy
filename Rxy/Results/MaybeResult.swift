@@ -4,7 +4,7 @@
 import RxSwift
 
 /// Result type for mocks which return a Maybe. MaybeResults can return values, completed or errors.
-public final class MaybeResult<T>: Result<T, Maybe<T>>, Resolvable {
+public final class MaybeResult<T>: Result<T>, Resolvable {
 
     /// Returns a completed Maybe.
     public static func completed() -> Self {

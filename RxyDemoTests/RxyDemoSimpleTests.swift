@@ -68,7 +68,7 @@ class RxyDemoSimpleTests: XCTestCase {
         mockHTTPClientOldSchool.getSingleURLResult = RemoteCallResponse(aValue: "abc")
         
         do {
-            let response: RemoteCallResponse? = try remoteService.makeSingleRemoteCall(toUrl: "xyz").toBlocking().first()
+            let response = try remoteService.makeSingleRemoteCall(toUrl: "xyz").toBlocking().first()
             validateSuccess(response: response)
         }
         catch let error {
@@ -78,7 +78,7 @@ class RxyDemoSimpleTests: XCTestCase {
     
     func testSimpleRxSwiftFunctionUsingRxy() {
         mockHTTPClientOldSchool.getSingleURLResult = RemoteCallResponse(aValue: "abc")
-        let response: RemoteCallResponse? = remoteService.makeSingleRemoteCall(toUrl: "xyz").waitForSuccess()
+        let response = remoteService.makeSingleRemoteCall(toUrl: "xyz").waitForSuccess()
         validateSuccess(response: response)
     }
 }

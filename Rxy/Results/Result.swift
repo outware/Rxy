@@ -3,7 +3,7 @@
 
 import RxSwift
 
-public class Result<T, O> {
+public class Result<T> {
     
     var eventFactory: (AnyObserver<T>) -> Void
     

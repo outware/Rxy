@@ -3,7 +3,7 @@
 import RxSwift
 
 /// Result type for mocks which return a Single. SingleResults can return values or errors.
-public final class SingleResult<T>: Result<T, Single<T>>, Resolvable {
+public final class SingleResult<T>: Result<T>, Resolvable {
 
     /**
      Returns a Single with the passed value as the result.
