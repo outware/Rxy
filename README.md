@@ -14,7 +14,7 @@ A collection of useful functions and classes that can simplify testing of RxSwif
 
 To achieve this, Rxy uses 3 core things:
 
-* __`waitFor*()`__ functions which wait on asynchronous Rx calls, then validate the results.
+* __`waitFor*()`__ functions which wait on the asynchronous Rx calls, then validate the results.
 * __`*Result`__ classes which provide centralised configuration of mock responses.
 * __`mockFunction(…)`__ functions which execute asynchronously in the background to simulate RxSwift functionality.
 
@@ -55,9 +55,7 @@ If you checkout the Rxy project, you will find an Xcode target called __RxyDemoT
 
 In unit testing we often we need to mock out protocols which return Rx objects. Writing these mocks can be time consuming and tedious and lead to a lot of cut-n-pasted code.
 
-As an example, lets look at a mock for a typical backend service. It provides 4 functions returning RxSwift objects: `postCompletable(…)`, `getSingle(…)`, `doMaybe(…)` and `doObservable()`. 
-
-First we'll look at the original mock as it might be coded in a test suite, then we'll convert it to use Rxy:
+As an example, let's look at a mock for a typical backend service that mocks 4 protocol functions written using RxSwift: `postCompletable(…)`, `getSingle(…)`, `doMaybe(…)` and `doObservable()`. First here's the mock as it might be coded in a test suite:
 
 ```swift
 class MockHTTPClientOldSchool: HTTPClient {
@@ -130,16 +128,15 @@ class MockHTTPClientOldSchool: HTTPClient {
 
 Points of interest:
 
-* Each function requires different variables to define the different results.
+* Each function requires multiple variables to define different results.
 * Each implementation has to include code to decide which result to produce or to fail the call.
 * All this code executes synchronously. 
-* A lot less code.
 
-Synchronicity is not important in a lot of unit tests, however in some situations mocks written synchronously can cause unit tests to pass when they should fail. For example where a function is using an asynchronous call internally and not waiting correctly for its results. If the mocks are synchronous, the tests may pass even though the code fails in production. 
+Whilst synchronicity can be ignored in a lot of unit tests in some it can cause unit tests to pass when they should fail. For example where the implementation is using an asynchronous call internally and not waiting for the results. If the mocks are synchronous, the tests may pass even though the code fails in production. 
 
-The summary is that this mock has a lot of variables and synchronous boilerplate code which which almost always ends up being cut-n-pasted to other mocks, resulting in an increasing tech debt to maintain.
+The summary is that this mock has a lot of variables, synchronous boilerplate code and a potentially flawed implementation which will almost certainly end up being cut-n-pasted to other mocks, resulting in a considerable amount of tech debt to maintain.
 
-Rxy's goal is to solve these problems and reduce the tech debt. Here's the Rxy version of the same mock:
+Rxy solves these problems and as a result, reduces the tech debt. Here's it's version of the same mock:
 
 ```swift
 class MockHTTPClientRxy: BaseMock, HTTPClient {
@@ -175,41 +172,45 @@ class MockHTTPClientRxy: BaseMock, HTTPClient {
 Comparing the two:
 
 * Only one variable required define a function's result.
-* Only one line to execute the function asynchronously and return the correct result.
-* Much, much easier to read and understand.
+* Only one line to execute the function *asynchronously* and return the correct result.
+* Shorter and easier to read and maintain.
 
-Whilst not technically required, Rxy's version Inherits from __`BaseMock`__ is useful because it allows Rxy to automatically place mock related errors (such as unexpected method call errors) back in the unit test where the mock was created. This puts them as close as possible to the failing tests and helps with debugging.
+Whilst not technically required, inheriting from __`BaseMock`__ is useful because it allows Rxy to automatically place mock related errors (such as unexpected method calls) in the unit test where the mock was created. Thus making it easier to figure out what went wrong when executing large test suites.
 
-Other than that, all that you have to remember to create a mock is: inherit from `BaseMock`, create a 'Result' variable, and call `mockFunction(…)`. Simple and easy.
+Other than that, all that you have to remember to create a Rxy mock is: 
+
+1. Inherit from `BaseMock` (Optional).
+2. Create a 'Result' variable.
+3. Call `mockFunction(…)`.
 
 ### Partial mocks
 
-Sometimes we can't use `BaseMock`. When partial mocking for example. In these sorts of cases we can still use Rxy by adding the `AsyncMock` protocol to gain access to Rxy's `mockFunction(…)` calls. Here's an example where we are partially mocking a `NetworkHTTPClient` class instead of the `HTTPClient` protocol.
+Sometimes we can't use `BaseMock`. In partial mocking situations for example. In these cases Rxy can still be applied by adding the `AsyncMock` protocol to gain access to it's `mockFunction(…)` calls. Here's an example of partially mocking a `NetworkHTTPClient` class instead of the `HTTPClient` protocol.
 
 ```swift
-class HTTPMock: NetworkHTTPClient, AsyncMock {
+class MockNetworkHTTPClient: NetworkHTTPClient, AsyncMock {
 
     var getSingleURL: String?
     var getSingleURLResult: SingleResult<RemoteCallResponse>?
-    func getSingle(url: String) -> Single<RemoteCallResponse> {
+    override func getSingle(url: String) -> Single<RemoteCallResponse> {
         getSingleURL = url
         return mockFunction(returning: getSingleURLResult)
     }
 }
 ```
 
-Yep, that's right. It looks exactly the same as using a `BaseMock`. The only difference is when executing, if an error is generated it will be placed on the `mockFunction(…)` line in the mock instead of the unit test.
+It looks exactly the same as a full mock implementation of a protocol. The only difference is when executing, if an error is generated it will be placed on the `mockFunction(…)` line instead of the unit test.
 
-But you can change that too. `mockFunction(…)` has two arguments which tell it the file and line where you want errors to be placed (Take a look at the `BaseMock` code and you'll see how easy it can be done). So if you if you know where you want to errors to occur, just set these two arguments.
+_Note: `mockFunction(…)` has two arguments which tell it the file and line where you want errors to be placed (Take a look at the `BaseMock` code) so if you if you know where you want to errors to occur, you can just set these two arguments._
 
 ## Unit Testing
 
 Now let's look at how we can slim down your unit tests. Again we'll start with how it's commonly done and then show how Rxy can make life easier.
 
-When testing RxSwift code developers often start by using __`subscribe(…)`__ to execute the functions. Excluding the surrounding test framework (XCTest or Quick), here's a typical example:
+When testing RxSwift code developers often start by using __`subscribe(…)`__ to execute the functions. Excluding the surrounding test framework (usually XCTest or Quick) here's a typical example:
 
 ```swift
-let mockHTTPClient = MockHTTPClient()
+let mockHTTPClient = MockHTTPClientRxy()
 let remoteService = RemoteService(client: mockHTTPClient)
 
 mockHTTPClient.getSingleURLResult = RemoteCallResponse(aValue: "abc")
@@ -234,16 +235,16 @@ expect(response?.aValue, line: line) == "abc"
 
 ```
 
-This is using the original `MockHTTPClient` mock and apart from that, there's quite a bit of boilerplate code needed to run the test. The `subscribe(…)` call itself, the `callDone` variable to track when it's finished, a Nimble `toEventually(…)` to wait for the to finish, all the dispose related code and finally the unexpected error reporting. Thats actually quite a bit of code and once you start writing a lot of tests you'll find yourself cutting and pasting a lot.
+Even though we're now using a Rxy based mock there's quite a bit of boilerplate code needed to create the test: The `subscribe(…)` call, the `callDone` variable to track when it's finished, a Nimble `toEventually(…)` to wait for the call to finish, all the dispose bag related code and finally unexpected error reporting. By the time you've written a few tests tests you'll find yourself cutting and pasting a lot.
 
-To be fair, RxSwift does provide a testing framework that can help simplify this. It's called __RxBlocking__ and is designed to turn asynchronous Rx calls into synchronous calls. Here's our test re0written to use it:
+To be fair, RxSwift does provide a testing framework called __RxBlocking__ that can help and here's the above test converted to use it:
 
 ```swift
-let mockHTTPClient = MockHTTPClient()
+let mockHTTPClient = MockHTTPClientRxy()
 let remoteService = RemoteService(client: mockHTTPClient)
 
 mockHTTPClient.getSingleURLResult = RemoteCallResponse(aValue: "abc")
-        
+
 do {
     let response: RemoteCallResponse? = try remoteService.makeSingleRemoteCall(toUrl: "xyz").toBlocking().first()
     expect(self.mockHTTPClient.getSingleURL, line: line) == "xyz"
@@ -254,12 +255,10 @@ catch let error {
 }
 ```
 
-It's certainly better, but we still have a fear amount of boiler plate and error checking code. 
-
-Rxy goes one step beyond this, combining RxBlocking with additional error checking in it's `waitfFor…(…)` functions to remove everything except the bare essentials of your test. Combining that with Rxy based mocks and you'll end up with this: 
+It's certainly better, but there's still a fair amount of boiler plate and error checking code. Rxy takes this the next logical step, combining RxBlocking with additional error checking in it's `waitfFor…(…)` functions to remove everything except the bare essentials of your test:: 
 
 ```swift
-let mockHTTPClient = MockHTTPClient()
+let mockHTTPClient = MockHTTPClientRxy()
 let remoteService = RemoteService(client: mockHTTPClient)
 
 mockHTTPClient.getSingleURLResult = .value(RemoteCallResponse(aValue: "abc"))
@@ -269,23 +268,11 @@ expect(self.mockHTTPClient.getSingleURL, line: line) == "xyz"
 expect(response?.aValue, line: line) == "abc"
 ```
 
-Compared to the original, it's considerable easier to read and write, and in case you didn't notice :-) It's also over half the size. 
-
-Notice we now have to ability to tell the mock what we want to respond with using the `.value(…)` function, and all the error catching code is gone, as are the RxBlocking calls.
-
-If we wanted our mock to return a `Single<T>` with an error, we could code the mock setting like this:
-
-```swift
-mockHTTPClient.getSingleURLResult = .throw(TestError.anError)
-```
-
-ie. Any and all options for what a mock can return are set on the same variable.
-
-So to summarise: Using Rxy significantly simplifies your mocks, and significantly simplifies your unit tests.
+Compared to the original, it's considerable easier to read and write, and in case you didn't notice :-) It's also over half the size. Notice all the error catching code is gone, as are the RxBlocking calls.
 
 ### A complex example
 
-Before we finish with this, lets look at a more complex test. I actually found code like like this in a real life test suite so it's a good example of just how much Rxy can simplify testing RxSwift based code. I've changed the names to protect the innocent, but as you can see, it would take anyone some time to figure out what this test does. It certainly took me some time and I had some written comments to help.
+Before we finish, lets look at a real world example I pulled from a large test suite. It's a good example of just how much Rxy can simplify testing RxSwift. I've changed the names to protect the innocent, but as you can see, it would take anyone some time to figure out what this test does. It certainly took me some time and I had some written comments to help.
 
 ```swift
 func testComplexRxSwiftCallsUsingSubscribe() {
@@ -319,9 +306,7 @@ func testComplexRxSwiftCallsUsingSubscribe() {
 }
 ```
 
-Figured it out? What it's doing is sending a series of calls to an API, changing the mocked response for each one, then checking the final result.
-
-Not the greatest. Here's Rxy's version of the same test:
+Figured it out? What it's doing is sending a series of calls to an API, changing the mocked response for each one, then checking the final result. Not the greatest. Here's Rxy's version of the same test:
 
 ```swift
 func testComplexRxSwiftCallsUsingRxy() {
@@ -342,7 +327,7 @@ Ta - Da!
 
 # Reference
 
-Lets take a look at the options Rxy provides for each of the available Rx types: `Observable<T>`, `Completable`, `Single<T>` and `Maybe<T>`. For each one I'll first list the functions that define the available result for the mocks, then the available wait functions you can use to wait and validate.
+Let's take a look at the options Rxy provides for each of the available Rx types: `Observable<T>`, `Completable`, `Single<T>` and `Maybe<T>`. For each one I'll first list the functions that define the available result for the mocks, then the available wait functions you can use to wait and validate.
 
 ## Observables
 
